@@ -1,0 +1,467 @@
+.text-align-center {
+  text-align: center;
+}
+.text-align-right {
+  text-align: right;
+}
+
+/** CSS for non-standard jQuery Mobile styles or Codiqa components **/
+.split-wrapper {
+  width: 100%;
+  min-height: 200px;
+  clear: both;
+}
+@media all and (min-width: 650px) {
+  .content-secondary {
+    text-align: left;
+    float: left;
+    width: 45%;
+    background: none;
+    padding: 1.5em 6% 3em 0;
+    margin: 0;
+  }
+  .content-secondary {
+    background: none;
+    border-top: none;
+  }
+  .content-primary {
+    width: 45%;
+    float: right;
+    margin-right: 1%;
+    padding-right: 1%;
+  }
+  .content-primary ul:first-child {
+    margin-top: 0;
+  }
+  .content-secondary ul.ui-listview, .content-secondary ul.ui-listview-inset {
+    margin: 0;
+  }
+  .content-secondary ul.ui-listview .ui-li-divider, .content-secondary ul.ui-listview .ui-li {
+    border-radius: 0px;
+  }
+  .content-secondary ul.ui-listview .ui-li {
+    border-left: 0;
+    border-right: 0;
+  }
+  .content-secondary h2 {
+    position: absolute;
+    left: -9999px;
+  }
+  .content-secondary .ui-li-divider {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  .content-secondary {
+    margin: 0;
+    padding: 0;
+  }
+  
+}
+@media all and (min-width: 750px){
+  .content-secondary {
+    width: 34%;
+  }
+  .content-primary {
+    width: 60%;
+    padding-right: 1%;
+  }	
+}
+
+@media all and (min-width: 1200px){
+  .content-secondary {
+    width: 30%;
+    padding-right:6%;
+    margin: 0px 0 20px 5%;
+  }
+  .content-secondary ul {
+    margin: 0;
+  }
+  .content-secondary {
+    margin: 0;
+    padding: 0;
+  }
+  .content-primary {
+    width: 50%;
+    margin-right: 5%;
+    padding-right: 3%;
+  }
+  .content-primary {
+    width: 60%;
+  }
+}
+
+#home_favorites {
+	margin-top: 15px;
+}
+
+#home_menugrid a span span {
+	white-space: normal;
+}
+
+ul#search_results {
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+#search_results .ui-li-aside, #favorites_list .ui-li-aside {
+	font-size: inherit;
+	/*margin-top: 1.2em;*/
+	width: 15%;
+	
+}
+
+#search_results .ui-li-aside img, #favorites_list .ui-li-aside img {
+	display: block;
+	float: right;
+	width: 25px;
+	margin-right: 5px;
+}
+
+.ui-header .ui-btn.header-search-button {
+	margin-right: 35px;
+}
+
+#fav_star_button {
+	float: right;
+	margin-right: -65px;
+	margin-top: -10px;
+}
+
+#book_info h3 {
+	padding-right: 65px;
+	margin-top: 0em;
+	margin-bottom: 0.5em;
+}
+
+#book_info p {
+	margin-top: 0.3em;
+	font-style: italic;
+	margin-bottom: 0.7em;
+}
+
+#book_info .ui-grid-a .ui-block-a {
+	width: 25%;
+}
+
+#book_info .ui-grid-a .ui-block-b {
+	width: 65%;
+}
+
+#book_info .ui-grid-a div {
+	padding: 2px 10px;
+}
+
+#favorite_delete h4 {
+	margin-top:0;
+}
+
+#close_map, #zoom_map {
+	position: absolute;
+	right: 5px;
+	border: 1px solid #000;
+	background-color: #000;
+	color: #fff;
+	
+	text-decoration: none;
+	opacity: 0.90;
+}
+
+.ui-li-thumb.list_decorator {
+	left: 85px;
+	top: 2px;
+}
+
+.book_available#status_indicators .available_indicator {
+	display: block;
+}
+
+.book_available#status_indicators .unavailable_indicator {
+	display: none;
+}
+
+.book_available#status_indicators .ordered_indicator {
+	display: none;
+}
+
+.book_unavailable#status_indicators .available_indicator {
+	display: none;
+}
+
+.book_unavailable#status_indicators .unavailable_indicator {
+	display: block;
+}
+
+.book_unavailable#status_indicators .ordered_indicator {
+	display: none;
+}
+
+.book_ordered#status_indicators .ordered_indicator {
+	display: block;
+}
+
+.book_ordered#status_indicators .available_indicator {
+	display: none;
+}
+
+.book_ordered#status_indicators .unavailable_indicator {
+	display: none;
+}
+#status_indicators div {
+	padding: 15px;
+	width: 135px;
+	margin: 0 auto;
+}
+
+#status_indicators div img {
+	float: left;
+	margin-top: -10px;
+}
+
+#status_indicators {
+	text-align: center;
+	padding-top: 5px;
+	font-weight: bold;
+}
+
+#search_page_nr {
+	text-align:center;
+	padding:0.6em 20px;
+	margin:0.5em 0;
+	font-weight:bold;
+}
+
+.book_action_button, #book_share_button {
+	margin-bottom: -8px;
+	margin-left:	5px;
+	margin-top:	-5px;
+	width: 30px;
+}
+
+.ui-header {
+	height: 45px;
+	
+}
+
+#page_home .ui-header .ui-title {
+	margin: 0.5em 15px 0.8em 55px;
+	text-align: left;
+}
+
+.ui-header .ui-title {
+	margin: 0.5em 0;
+	font-size: 19px;
+}
+
+.header_button {
+	background: transparent;
+	border: none;
+}
+
+.header_button .ui-btn-inner {
+	padding: 0;
+	border: none;
+}
+
+.header_button.ui-shadow {
+	box-shadow: none;
+}
+
+.ui-header .ui-btn-left {
+	top: 2px;
+	left: 1px;
+}
+
+.colon {
+	margin-bottom: -2px;
+	padding: 0 6px;
+}
+
+.search_button.ui-btn-right {
+	right: 8px;
+}
+
+#page_favorites .ui-header h3 img.favicon{
+	margin-bottom: -4px;
+	padding-left: 4px;
+}
+
+#no_books, .no_books {
+	padding : 15px;
+	font-weight : bold;
+	text-align: center;
+}
+
+.autocomplete-w1 { z-index:9999; position:absolute; top:0px; left:0px; margin:6px 0 0 6px; }
+.autocomplete { border:1px solid #999; cursor:default; text-align:left; max-height:350px; overflow:auto; margin:-6px 6px 6px -6px;}
+.autocomplete .selected { background:#F0F0F0; }
+.autocomplete div { padding:12px 5px; white-space:wrap; overflow:auto;
+    background: 			#eee ;
+	background-image: -webkit-gradient(linear, left top, left bottom, from( #fff /*{c-bup-background-start}*/), to( #f1f1f1 /*{c-bup-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient( #fff /*{c-bup-background-start}*/, #f1f1f1 /*{c-bup-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient( #fff /*{c-bup-background-start}*/, #f1f1f1 /*{c-bup-background-end}*/); /* FF3.6 */    
+    border: 1px solid #CCCCCC;
+    color: #222222;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #FFFFFF; border-width: 1px 0 0;}
+.autocomplete strong { font-weight:normal; color:#3399FF; }
+
+#page_map .ui-content {
+	padding: 0;
+}
+
+#search_form_results .ui-field-contain {
+	padding: 0 0 5px 0;
+	margin-bottom:0;
+}
+
+#label_ebook_toggle {
+	font-size: 14px;
+}
+
+#ebook_toggle_box {
+	max-width: 50%;
+	display: inline-block;
+}
+
+#search_button_box {
+	width: 48%;
+	display: inline-block;
+	float: right;
+	position: relative;
+	top: 6px;
+}
+
+#search_button_box .ui-btn-icon-notext {
+	height: 34px;
+	width: 34px;
+}
+
+#search_button_box .ui-btn {
+	margin-top:0;
+}
+
+#search_button_box .ui-btn-inner {
+	padding: 0.4em 8px;
+	font-size: 15px;
+}
+
+#search_form_results {
+	margin: -15px -15px 0px ;
+	padding: 5px 5px 0;
+	border-bottom: 1px solid #ccc;
+	background: #fff;
+}
+
+#search_results_count {
+	margin: -5px -15px 0px ;
+	padding: 5px 5px 8px 15px;
+	background: #fff;
+	/*
+	background-image: -webkit-linear-gradient( #fff , #f1f1f1);
+	background:    -moz-linear-gradient( #fff , #f1f1f1 );
+	*/
+}
+
+#search_page_form div.ui-slider-switch.ui-slider-mini, #search_page_form div.ui-slider-switch {
+    width: 8.5em;
+    top: 6px;
+}
+
+#block-ui {
+    display: none;
+    cursor: wait;
+    position: absolute;
+    top: 0px;
+    left: 0px;  
+    width: 100%;
+    height: 100%;
+    z-index: 9; 
+    background-color: transparent;
+    opacity: 0.5;
+    position: fixed;
+}
+
+.ui-header-fixed, .ui-footer-fixed {
+    z-index: 8 !important;
+}
+
+.no_favorites_message {
+	font-weight: bold;
+}
+
+.no_fav_text {
+	font-style: italic;
+}
+
+.ui-icon-fullscreen {
+	background-image: url("images/fullscreen.png");
+	
+}
+
+#zoom_map .ui-icon {
+	background: transparent;
+	box-shadow: none;
+	background-image: url("images/fullscreen.png");
+	background-size: 18px 18px;
+	border-radius: 0;
+}
+
+#page_locationhours h2 {
+	margin-top:0;
+	margin-bottom: 0.4em;
+}
+
+#page_locationhours h3 {
+	margin-bottom: 0.4em;
+}
+
+a.ui-input-clear {
+	display: none;
+}
+
+.ui-grid-a.menu_grid a img {
+	float: left;
+	width: 35px;
+	margin-top: 4px;
+	margin-right: 6px;
+
+}
+
+.icon_button_container {
+	width: 125px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.icon_button_container p {
+	margin: 0 auto;
+	padding: 0;
+}
+
+#search_icon_container {
+	width: 240px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+#book_icon_box {
+	width: 25%;
+	float:left;
+}
+
+#book_icon_text_box {
+	width: 65%;
+	float:left;
+	font-size: 130%;
+	text-align:center;
+	padding-top: 5px;
+}
+
+#how_to_scan_desc {
+	margin:0 0 0.4em;
+	padding-left: 15px;
+}
+
+#how_to_scan_desc li {
+	margin: 0.1em 0;
+}
