@@ -88,15 +88,15 @@
 	
 		//window.share = new Share();
 		$.mobile.defaultPageTransition = "none";
-		window.DB =  new Lawnchair(function(){});
-		window.FavHistory = [];
-		DB.get("favhistory",function(d){
+		BookWorms.DB =  new Lawnchair(function(){});
+		window.BookWorms.FavHistory = [];
+		BookWorms.DB.get("favhistory",function(d){
 			if (d != null) {
-				window.FavHistory = d.history;
+				window.BookWorms.FavHistory = d.history;
 			}
 		});
-		$.each(FavHistory, function (i, el) {
-			DB.get(el, function(d){
+		$.each(BookWorms.FavHistory, function (i, el) {
+			BookWorms.DB.get(el, function(d){
 				//console.log(el,d);
 				window.BookWorms.searchCache[el] = d.doc;
 				//console.log("cache",window.BookWorms.searchCache);
@@ -104,7 +104,7 @@
 		});
 		
 		window.BookWorms.includeEbooks = "on";
-		DB.get("includeebooks", function(d) {
+		BookWorms.DB.get("includeebooks", function(d) {
 			if (d != null) {
 				window.BookWorms.includeEbooks = d.status;
 			}
@@ -198,8 +198,8 @@
 			if (u.hash == "#page_search") {
 				$("#no_books").html("");
 				$('#searchinput1').val("");
-			//	if (window.a)
-			//		$(window.a.container).scrollTop(0);
+			//	if (window.BookWorms.AutocompleteA)
+			//		$(window.BookWorms.AutocompleteA.container).scrollTop(0);
 			}
 			*/
 			if (u.hash == "#page_map" || u.hash == "#page_book_directions") {
@@ -257,15 +257,15 @@
 		//console.log(term);
 		if (term == "")
 			return false;
-		if (window.b)
-			window.b.container.hide();
+		if (window.BookWorms.AutocompleteB)
+			window.BookWorms.AutocompleteB.container.hide();
 		
 		$.mobile.changePage(getAppSearchUrl(term,0));
 		return false;
 	});
 	
 	$("#home_search_form").submit(function(e){
-		window.b.container.hide();
+		window.BookWorms.AutocompleteB.container.hide();
 		e.preventDefault();
 		return false;
 	});
@@ -279,12 +279,12 @@
 	
 	
 	$("#page_home").live('pageshow',function(event) {
-		if(!window.autoCompleteInit2) {
+		if(!window.BookWorms.autoCompleteInit2) {
 			//var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?jsonp=?","index":"title", minChars: 3};
 			var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?"+window.JSONP,"index":"title", minChars: 3};
-			window.b = $("#searchinput2").autocomplete(options);
-			//alert(window.a);
-			window.autoCompleteInit2 = true;
+			window.BookWorms.AutocompleteB = $("#searchinput2").autocomplete(options);
+			//alert(window.BookWorms.AutocompleteA);
+			window.BookWorms.autoCompleteInit2 = true;
 		}
 		$("#searchinput2").val("");
 	});
@@ -299,12 +299,12 @@
 		//console.log(event);
 		$(this).addClass('ui-page-active');
 		//console.log(2);
-		if(!window.autoCompleteInit) {
+		if(!window.BookWorms.autoCompleteInit) {
 			//var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?jsonp=?","index":"title", minChars: 3};
 			var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?"+window.JSONP,"index":"title", minChars: 3};
-			window.a = $("#searchinput1").autocomplete(options);
-			//alert(window.a);
-			window.autoCompleteInit = true;
+			window.BookWorms.AutocompleteA = $("#searchinput1").autocomplete(options);
+			//alert(window.BookWorms.AutocompleteA);
+			window.BookWorms.autoCompleteInit = true;
 		}
 		$(document).scrollTop(0);
 	});

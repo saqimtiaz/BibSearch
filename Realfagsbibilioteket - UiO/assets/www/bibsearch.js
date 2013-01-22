@@ -94,7 +94,7 @@ function getBook(urlObj, options) {
 				$("#book_info").html(html);
 				
 				var fav = false;
-				DB.exists(recordId, function(exists) {
+				BookWorms.DB.exists(recordId, function(exists) {
 					if(exists) {
 						fav = true;
 						};
@@ -141,26 +141,26 @@ function getBook(urlObj, options) {
 			function toggleFavorite(recordId) {
 				//console.log(recordId);
 				var fav = false;
-				DB.exists(recordId, function(exists) {
+				BookWorms.DB.exists(recordId, function(exists) {
 					//console.log(exists);
 					if(exists) {
 						this.remove(recordId);
-						FavHistory = $.grep(FavHistory, function(val) {
+						BookWorms.FavHistory = $.grep(BookWorms.FavHistory, function(val) {
 							return val !== recordId;
 						});
 					} else {
 						//console.log(recordId);
 						//console.log(window.BookWorms.searchCache[recordId+""]);
 						this.save({key:recordId,doc:window.BookWorms.searchCache[recordId+""]});
-						FavHistory.unshift(recordId);
-						if (FavHistory.length > 15) {
-							FavHistory.pop();
+						BookWorms.FavHistory.unshift(recordId);
+						if (BookWorms.FavHistory.length > 15) {
+							BookWorms.FavHistory.pop();
 						}
 						fav = true;
 					}
 				});
 
-				DB.save({key:"favhistory", history: FavHistory});
+				BookWorms.DB.save({key:"favhistory", history: BookWorms.FavHistory});
 				//XXX totally broken
 				$("#fav_star_button").attr("src", fav ? "star.png" : "star_empty.png"); 
 				$("#favorite_book_button").find(".ui-icon").toggleClass("ui-icon-plus").toggleClass("ui-icon-minus");
@@ -172,8 +172,8 @@ function getBook(urlObj, options) {
 				//console.log(term);
 				if (term == "")
 					return false;
-				if (window.a)
-					window.a.container.hide();
+				if (window.BookWorms.AutocompleteA)
+					window.BookWorms.AutocompleteA.container.hide();
 				
 				$.mobile.changePage(getAppSearchUrl(term,0));
 				return false;
@@ -185,8 +185,8 @@ function getBook(urlObj, options) {
 			});
 			
 			$("#search_page_form").submit(function(e){
-				if(window.a)
-					window.a.container.hide();
+				if(window.BookWorms.AutocompleteA)
+					window.BookWorms.AutocompleteA.container.hide();
 				e.preventDefault();
 				return false;
 			});
@@ -304,9 +304,9 @@ function getBook(urlObj, options) {
 			}
 			
 			function updateHomeFavorites() {
-				//console.log(window.FavHistory);
+				//console.log(window.BookWorms.FavHistory);
 				var favs = [];
-				$.each(window.FavHistory, function (i, el) {
+				$.each(window.BookWorms.FavHistory, function (i, el) {
 					if (i<3) {
 						favs.push(window.BookWorms.searchCache[el]);
 					} else {
@@ -327,7 +327,7 @@ function getBook(urlObj, options) {
 			
 			function showFavorites(urlObj, options) {
 				window.favs;
-				DB.where('record.doc != undefined').asc('doc.title','window.favs = records');
+				BookWorms.DB.where('record.doc != undefined').asc('doc.title','window.favs = records');
 				//a;
 				//console.log(favs);
 				function SortByTitle(a, b){
@@ -355,7 +355,7 @@ function getBook(urlObj, options) {
 				//console.log(1);
 				var favid = urlObj.hash.split("?")[1];
 				//console.log(favid);
-				DB.get(favid, function(d) {
+				BookWorms.DB.get(favid, function(d) {
 					//console.log(d);
 					//console.log(d.doc.title);
 					$("#delete_book_title").html(d.doc.title);	
@@ -417,7 +417,7 @@ function getBook(urlObj, options) {
 			
 			$("#ebook_toggle").change(function() {
 				window.BookWorms.includeEbooks = $(this).val();
-				DB.save({key:"includeebooks", status: $(this).val()});
+				BookWorms.DB.save({key:"includeebooks", status: $(this).val()});
 			});
 			
 			
