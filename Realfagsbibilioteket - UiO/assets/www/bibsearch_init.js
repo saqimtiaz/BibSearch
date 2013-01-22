@@ -26,10 +26,10 @@
 		return this;
 	};		
 
-	
 	//end cursor functions
 	//
 	
+	//
 	//start handlebars custom extensions
 	Handlebars.registerHelper('listauthors', function(context, block) {
 		return context.map(function(item) {
@@ -72,14 +72,17 @@
 	  }
 	});
 	//end handlebars custom extensions
+	//
 
-	//<!--  dev hack to allow for jsonp functionality when working with local files -->	
+	//
+	// dev hack to allow for jsonp functionality when working with local files	
 	if (window.location.href.indexOf("saq") > -1 || window.location.href.indexOf("mohamsi") > -1) {
 		window.JSONP = "jsonp=?";
 	} else {
 		window.JSONP = "";
 	}	
 	
+	//init code for JQM
 	window.BookWorms = { searchCache: {}};
 	$(document).bind("mobileinit", function(){
 	

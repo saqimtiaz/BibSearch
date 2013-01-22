@@ -19,7 +19,6 @@
 		<script src="barcodescanner.js"></script>
 		<script type="text/javascript" charset="utf-8" src="share.js" ></script>
 		<script src="handlebars-1.0.0.beta.6.js"> </script>	
-
 		<script src="lawnchair-0.6.1.min.js"> </script>
 		<script src="query.js"></script>
 		<script src="bibsearch_init.js"> </script>
@@ -138,6 +137,7 @@
 		
 	</head>
 	<body>
+	
 		<!-- Home -->
 		<div data-role="page" id="page_home">
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
@@ -303,6 +303,8 @@
 			</div>
 		</div>	
 
+
+		<!--  dialog for deleting favorites -->
 		<div data-role="page" id="favorite_delete">
 			<div data-role="header" data-theme="d">
 				<h1>Delete?</h1>
@@ -314,6 +316,7 @@
 				<a href="javascript:;" data-role="button" data-rel="back">Cancel</a>
 			</div>
 		</div>
+
 		
 		<!-- How to scan bar code-->
 		<div data-role="page" id="how_to_scan">
@@ -334,6 +337,7 @@
 				<a href="javascript:;" data-role="button" data-rel="back" data-theme="b" id="scan_ok_button">Scan now</a>
 			</div>
 		</div>		
+
 
         <!-- Location and hours -->
 		<div data-role="page" id="page_locationhours">
@@ -377,8 +381,6 @@
 		</div>		
 
 
-
-		
         <!-- Book Directions -->
 		<div data-role="page" id="page_book_directions">
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
@@ -401,7 +403,7 @@
 		</div>	
 	
 
-        <!-- IMAGE -->
+        <!-- Large book map -->
 		<div data-role="page" id="page_map">
 			
 			<div data-role="content">
@@ -413,13 +415,9 @@
 
 		<div id="block-ui">
 		</div>
+		
 		<script src="bibsearch.js"></script>
 		
-		<script>
-						
-			
-			
-		</script>
 		<!--
 		<script src="http://debug.shadow.adobe.com:8080/target/target-script-min.js#saq"></script>
 		-->

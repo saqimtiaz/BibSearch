@@ -425,10 +425,3 @@ function getBook(urlObj, options) {
 				window.NoBarCodeHelp = !window.NoBarCodeHelp;
 			});
 			
-	/*		
-			var options,a;
-			jQuery(function(){
-			var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?jsonp=?","index":"title"}
-				window.a = $("#searchinput1").autocomplete(options);
-			});
-			*/
