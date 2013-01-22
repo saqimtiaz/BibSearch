@@ -82,7 +82,10 @@
 		window.JSONP = "";
 	}	
 	
+	//
 	//init code for JQM
+	
+	//global object to hold all custom code.
 	window.BookWorms = { searchCache: {}};
 	$(document).bind("mobileinit", function(){
 	
@@ -151,7 +154,7 @@
 				// on the fly based on our in-memory category data structure.
 				$.mobile.showPageLoadingMsg();
 				$('#block-ui').show();
-				getSearchResults(u, data.options);
+				BookWorms.getSearchResults(u, data.options);
 				
 				// Make sure to tell changePage() we've handled this call so it doesn't
 				// have to do anything.
@@ -167,7 +170,7 @@
 				// on the fly based on our in-memory category data structure.
 				$.mobile.showPageLoadingMsg();
 				$('#block-ui').show();
-				getBook(u, data.options);
+				BookWorms.getBook(u, data.options);
 
 				// Make sure to tell changePage() we've handled this call so it doesn't
 				// have to do anything.
@@ -178,7 +181,7 @@
 			if (u.hash == "#page_favorites") {
 				//$.mobile.showPageLoadingMsg();
 				//$('#block-ui').show();
-				showFavorites(u, data.options);
+				BookWorms.showFavorites(u, data.options);
 				return;
 			}
 			
@@ -186,12 +189,12 @@
 			
 			if (u.hash.search(re) !== -1) {
 				//console.log(1);
-				updateFavDeleteDialog(u, data.options);
+				BookWorms.updateFavDeleteDialog(u, data.options);
 				return;
 			}
 			
 			if (u.hash == "" || u.hash == "#page_home") {
-				updateHomeFavorites();
+				BookWorms.updateHomeFavorites();
 				return;
 			}
 		/*	
@@ -246,7 +249,7 @@
 	});		
 	
 	$("#page_home").live('pagebeforecreate',function(event) {
-		updateHomeFavorites();
+		BookWorms.updateHomeFavorites();
 		$("#home_search_box").bind('mouseover', function(){
 		   return false;
 		});
@@ -260,7 +263,7 @@
 		if (window.BookWorms.AutocompleteB)
 			window.BookWorms.AutocompleteB.container.hide();
 		
-		$.mobile.changePage(getAppSearchUrl(term,0));
+		$.mobile.changePage(BookWorms.getAppSearchUrl(term,0));
 		return false;
 	});
 	
