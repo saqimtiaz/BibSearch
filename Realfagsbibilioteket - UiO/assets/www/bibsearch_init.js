@@ -86,7 +86,11 @@
 	//init code for JQM
 	
 	//global object to hold all custom code.
-	window.BookWorms = { searchCache: {}};
+	window.BookWorms = {
+			searchCache: {}
+	};
+	
+	// hook in before JQM initializes and setup defaults and initialize lawnchair
 	$(document).bind("mobileinit", function(){
 	
 		//window.share = new Share();
@@ -100,12 +104,11 @@
 		});
 		$.each(BookWorms.FavHistory, function (i, el) {
 			BookWorms.DB.get(el, function(d){
-				//console.log(el,d);
 				window.BookWorms.searchCache[el] = d.doc;
-				//console.log("cache",window.BookWorms.searchCache);
 			});
 		});
 		
+		//set default state of ebooks toggle switch
 		window.BookWorms.includeEbooks = "on";
 		BookWorms.DB.get("includeebooks", function(d) {
 			if (d != null) {
@@ -113,6 +116,7 @@
 			}
 		});
 		
+		//defaults for ajax requests, we want to show a message when requests timeout and hide the ui blocking div
 		$.ajaxSetup({
 			timeOut: 10000,
 		  
@@ -123,35 +127,35 @@
 		  	}
 		});
 	});	
-	
-	$(document).bind("pageshow", function(e,data) {
 
+	
+	//always make sure that a pageshow results in the loading message being hidden and the UI blocking disabled.
+	// we need this since we manually show a message and block the UI to prevent multiple actions when network connectivity is slow
+	$(document).bind("pageshow", function(e,data) {
 		$(this).addClass('ui-page-active');
 		$.mobile.hidePageLoadingMsg();
 		$('#block-ui').hide();
 	});
 
+	
 	// Listen for any attempts to call changePage().
+	// All pages that need customization depending on the query portion of the hash need a hook in here
 	$(document).bind( "pagebeforechange", function( e, data ) {
 		
-
 		// We only want to handle changePage() calls where the caller is
 		// asking us to load a page by URL.
 
 		if ( typeof data.toPage === "string" ) {
 
-			//window.BookWorms.nextPage = data.toPage;
 			// We are being asked to load a page by URL, but we only
-			// want to handle URLs that request the data for a specific
-			// category.
+			// want to handle URLs that match specific patterns
 			var u = $.mobile.path.parseUrl( data.toPage ),
 				re = /^#page_search_results/;
 
 			if ( u.hash.search(re) !== -1 ) {
 
-				// We're being asked to display the items for a specific category.
-				// Call our internal method that builds the content for the category
-				// on the fly based on our in-memory category data structure.
+				// We're being asked to display the items for a specific search
+				// Fetch the search results from the server, the callback will handle the page display
 				$.mobile.showPageLoadingMsg();
 				$('#block-ui').show();
 				BookWorms.getSearchResults(u, data.options);
@@ -165,9 +169,8 @@
 			re = /^#page_books/;
 			if ( u.hash.search(re) !== -1 ) {
 
-				// We're being asked to display the items for a specific category.
-				// Call our internal method that builds the content for the category
-				// on the fly based on our in-memory category data structure.
+				// We're being asked to display information about a specific book.
+				// Call our internal method that fetches the book information, the callback will display the page
 				$.mobile.showPageLoadingMsg();
 				$('#block-ui').show();
 				BookWorms.getBook(u, data.options);
@@ -179,8 +182,6 @@
 			}
 			
 			if (u.hash == "#page_favorites") {
-				//$.mobile.showPageLoadingMsg();
-				//$('#block-ui').show();
 				BookWorms.showFavorites(u, data.options);
 				return;
 			}
@@ -188,26 +189,19 @@
 			re = /^#favorite_delete/;
 			
 			if (u.hash.search(re) !== -1) {
-				//console.log(1);
+				//update the dialog for deleting favorites with the appropriate book title and id
 				BookWorms.updateFavDeleteDialog(u, data.options);
 				return;
 			}
 			
+			// this is the home page, each time it is going to be shown we want to refresh the list of favorites.
 			if (u.hash == "" || u.hash == "#page_home") {
 				BookWorms.updateHomeFavorites();
 				return;
 			}
-		/*	
-			if (u.hash == "#page_search") {
-				$("#no_books").html("");
-				$('#searchinput1').val("");
-			//	if (window.BookWorms.AutocompleteA)
-			//		$(window.BookWorms.AutocompleteA.container).scrollTop(0);
-			}
-			*/
+
 			if (u.hash == "#page_map" || u.hash == "#page_book_directions") {
 				var b = window.BookWorms.currentBook;
-				//console.log(b);
 				var subject = b.collection;
 				if (BookCollections[b.collection] == undefined) {
 					alert("This subject has not been mapped for the protoype, try a book in Physics instead");
@@ -248,25 +242,32 @@
 		}
 	});		
 	
+	//hook in before the home page is created
 	$("#page_home").live('pagebeforecreate',function(event) {
+		//populate the list of favorites
 		BookWorms.updateHomeFavorites();
+		// remove the default mouseover event from the box surrounding the search box
 		$("#home_search_box").bind('mouseover', function(){
 		   return false;
 		});
-		
+	
+	// add behaviour to the search button on the home page	
 	$('#home_search_button').bind('click', function (e) {
 		e.preventDefault();
 		var term = $('#searchinput2').val();
 		//console.log(term);
+		//do nothing if no text is entered
 		if (term == "")
 			return false;
+		// hide autocomplete for this search field
 		if (window.BookWorms.AutocompleteB)
 			window.BookWorms.AutocompleteB.container.hide();
-		
+		//change page to a URL that contains the search term. This will fetch the search results and display them.
 		$.mobile.changePage(BookWorms.getAppSearchUrl(term,0));
 		return false;
 	});
 	
+	// Hide the autocomplete list when the search form is submitted so that we don't have a hanging orphan list of suggestions.
 	$("#home_search_form").submit(function(e){
 		window.BookWorms.AutocompleteB.container.hide();
 		e.preventDefault();
@@ -274,39 +275,36 @@
 	});
 	
 	
+	//map the submitting of the search form to a click on the search button.
 	$('#home_search_form').submit(function() {
-		$("#home_search_button").trigger("click");
-	});				
-		
+			$("#home_search_button").trigger("click");
+		});				
 	});
 	
 	
 	$("#page_home").live('pageshow',function(event) {
+		//initialize autocomplete on the home page if it isn't already initialized
 		if(!window.BookWorms.autoCompleteInit2) {
-			//var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?jsonp=?","index":"title", minChars: 3};
 			var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?"+window.JSONP,"index":"title", minChars: 3};
 			window.BookWorms.AutocompleteB = $("#searchinput2").autocomplete(options);
-			//alert(window.BookWorms.AutocompleteA);
 			window.BookWorms.autoCompleteInit2 = true;
 		}
+		//clear the previous search query from the search input field
 		$("#searchinput2").val("");
 	});
 	
+	//refresh the state of the ebook toggle so it matches the user preference.
 	$("#page_search_results").live('pagebeforeshow', function(event) {
-		//console.log(1);
 		$('#ebook_toggle').val(window.BookWorms.includeEbooks).slider("refresh");
 		
 	});
 	
+	// when the search results page is shown, ensure that autocomplete has been initalized and scroll to the top as we might be transitioning to the same page.
 	$("#page_search_results").live('pageshow', function(event) {
-		//console.log(event);
 		$(this).addClass('ui-page-active');
-		//console.log(2);
 		if(!window.BookWorms.autoCompleteInit) {
-			//var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?jsonp=?","index":"title", minChars: 3};
 			var options = {'serviceUrl' : "https://ask.bibsys.no/ask2/json/autocompleteProxy.jsp?"+window.JSONP,"index":"title", minChars: 3};
 			window.BookWorms.AutocompleteA = $("#searchinput1").autocomplete(options);
-			//alert(window.BookWorms.AutocompleteA);
 			window.BookWorms.autoCompleteInit = true;
 		}
 		$(document).scrollTop(0);
