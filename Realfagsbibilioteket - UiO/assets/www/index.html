@@ -99,12 +99,31 @@
 						</div>
 
 						{{#unlessCond this.material "electronic"}}	
+
+						
+						<div class="ui-block-a" style="margin-top:10px;"> 
+							Floor:
+						</div>
+						<div class="ui-block-b"  style="margin-top:10px;">
+							2nd floor
+						</div>
+						
+						{{#if this.collection}}
 						<div class="ui-block-a"> 
-							Location:
+							Collection:
 						</div>
 						<div class="ui-block-b">
-							{{this.collection}}{{#if this.collection}},{{/if}} {{this.callnumber}}
+							{{this.collection}}
 						</div>
+						{{/if}}
+
+						<div class="ui-block-a"> 
+							Code:
+						</div>
+						<div class="ui-block-b">
+							{{this.callnumber}}
+						</div>
+
 						{{/unlessCond}}
 					</div>		
 		</script>		
@@ -129,9 +148,25 @@
 		<script id="directions_bookinfo_template" type="text/x-handlebars-template">
 			<b>{{this.title}}</b><br>
 			by {{#listauthors this.creators}}{{/listauthors}}<br><br>
+
+			<a id="zoom_map" href="#page_map" data-role="button" data-inline="true" data-theme="a" data-icon="fullscreen" data-iconpos="right">zoom</a>
+			<a href="#page_map" data-transition="fade">
+				<img id="book_map" src="" width="100%"/>
+			</a>
+
 			
-			Location: 2nd floor, {{this.collection}}{{#if this.collection}},{{/if}} {{this.callnumber}}<br><br>
-			Shelf: {{this.shelf}}
+			<div class="bookinfo_definition"> 2nd floor</div>
+			<div class="bookinfo_term">Floor:</div>
+			
+			{{#if this.collection}}
+			<div class="bookinfo_definition">{{this.collection}}</div>
+			<div class="bookinfo_term">Collection:</div>
+			{{/if}}
+
+			<div class="bookinfo_definition bookinfo_highlighted">{{this.callnumber}}</div>
+			<div class="bookinfo_term">Code:</div>
+
+			
 		</script>
 		<!--  end handelbars templates -->
 		
@@ -390,15 +425,15 @@
 			</div>
 			<div data-role="content" style="padding: 15px">
 				<div>
+				<!--  
 					<a id="zoom_map" href="#page_map" data-role="button" data-inline="true" data-theme="a" data-icon="fullscreen" data-iconpos="right">zoom</a>
 					<a href="#page_map" data-transition="fade">
 						<img id="book_map" src="" width="100%"/>
 					</a>
+					-->
 				</div>
 				<div id="directions_book_info"></div>
-				<div>
-					<img id="book_shelf_map" src="" height="125px" />
-				</div>
+				
 			</div>
 		</div>	
 	

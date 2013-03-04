@@ -201,10 +201,19 @@
 			}
 
 			if (u.hash == "#page_map" || u.hash == "#page_book_directions") {
+				
+				
 				var b = window.BookWorms.currentBook;
+				
+				var url = "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/imgtest-saq.php?collection=%22" + b.collection + "%22&callnumber=%22" + b.callnumber + "%22";
+				var orientation = "&orientation=v";
+				$("#book_map_large").attr("src", url + orientation );
+				$("#book_map").attr("src", url );
+				
+				/*
 				var subject = b.collection;
 				if (BookCollections[b.collection] == undefined) {
-					alert("This subject has not been mapped for the protoype, try a book in Physics instead");
+					alert("This subject has not been mapped for the prototype, try a book in Physics instead");
 					e.preventDefault();
 					return false;							
 				} else {
@@ -234,9 +243,10 @@
 					
 					//console.log(shelf);
 					//$("#map_shelf_loc").html("Section: " + section + ", shelf: " + shelf);
-					$("#book_map_large").attr("src", "images/vertical/hylle" + section + ".png" );
+					$("#book_map_large").attr("src", "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/imgtest-saq.php?collection=%22Farm.%22&callnumber=%2210.80%22PER%22&orientation=v" );
 					
 				}
+				*/
 			}
 			
 		}
@@ -308,4 +318,13 @@
 			window.BookWorms.autoCompleteInit = true;
 		}
 		$(document).scrollTop(0);
+	});
+	
+	$("#page_map").live('pageshow', function(event){
+		//console.log("showing");
+		//$(document).scrollTop($(document).height()-$(window).height());
+		$('html, body').animate({
+		    scrollTop: $(document).height()-$(window).height()},
+		    1400, "swing"
+		);
 	});

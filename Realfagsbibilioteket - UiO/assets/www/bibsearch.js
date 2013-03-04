@@ -124,12 +124,17 @@ $.extend(BookWorms,{
 			$("#button_where_is_it").show();
 			$("#button_how_to_access").hide();
 			//console.log(data.result.documents[0]);
-			var locinfo = BookWorms.getSectionForCurrentBook();
-			$("#book_map").attr("src", "images/hylle" + locinfo[0] + ".png" );
-			$("#book_shelf_map").attr("src", "images/shelf" + locinfo[1] + ".png" );
+			
+			
+			
+			//map urls set here
+			
+			//var locinfo = BookWorms.getSectionForCurrentBook();
+			//$("#book_map").attr("src", "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/imgtest-saq.php?collection=%22Farm.%22&callnumber=%2210.80%22PER%22" );
+			//$("#book_shelf_map").attr("src", "images/shelf" + locinfo[1] + ".png" );
 			var s = $("#directions_bookinfo_template").html();
 			var t = Handlebars.compile(s);
-			data.result.documents[0]["shelf"] = locinfo[1];
+			//data.result.documents[0]["shelf"] = locinfo[1];
 			var h = t(data.result.documents[0]);
 			$("#directions_book_info").html(h);		
 		}

@@ -141,6 +141,7 @@ ul#search_results {
 
 #book_info .ui-grid-a .ui-block-a {
 	width: 25%;
+	font-weight: bold;
 }
 
 #book_info .ui-grid-a .ui-block-b {
@@ -464,4 +465,22 @@ a.ui-input-clear {
 
 #how_to_scan_desc li {
 	margin: 0.1em 0;
+}
+
+
+.bookinfo_definition {
+	width: 75%;
+	float: right;
+	
+}
+
+.bookinfo_term {
+	width: 25%;
+	font-weight: bold;
+	
+}
+
+.bookinfo_highlighted {
+	color: #DB0B15;
+	
 }
