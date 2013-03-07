@@ -320,6 +320,7 @@
 		$(document).scrollTop(0);
 	});
 	
+	/*
 	$("#page_map").live('pageshow', function(event){
 		//console.log("showing");
 		//$(document).scrollTop($(document).height()-$(window).height());
@@ -328,3 +329,4 @@
 		    1400, "swing"
 		);
 	});
+	*/
