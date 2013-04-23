@@ -531,3 +531,9 @@ a.ui-input-clear {
 .bibsearch_content_strong {
 	font-weight: bold;
 }
+
+.questionmark {
+	width: 20px;
+	height: 20px;
+	margin-bottom: -4px;
+}
