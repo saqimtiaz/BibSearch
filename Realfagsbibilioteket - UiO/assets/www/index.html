@@ -105,7 +105,7 @@
 							Floor:
 						</div>
 						<div class="ui-block-b"  style="margin-top:10px;">
-							2nd floor <img class="questionmark" src="images/questionmark.png" />
+							2nd floor <a href="#page_floor_help"><img class="questionmark" src="images/questionmark.png" /></a>
 						</div>
 						
 						{{#if this.collection}}
@@ -113,7 +113,7 @@
 							Collection:
 						</div>
 						<div class="ui-block-b">
-							{{this.collection}} <img class="questionmark" src="images/questionmark.png" />
+							{{this.collection}} <a href="#page_collections_help"><img class="questionmark" src="images/questionmark.png" /></a>
 						</div>
 						{{/if}}
 
@@ -121,7 +121,7 @@
 							Code:
 						</div>
 						<div class="ui-block-b">
-							{{this.callnumber}} <img class="questionmark" src="images/questionmark.png" />
+							{{this.callnumber}} <a href="#page_code_help"><img class="questionmark" src="images/questionmark.png" /></a>
 						</div>
 
 						{{/unlessCond}}
@@ -155,15 +155,15 @@
 			</a>
 
 			
-			<div class="bookinfo_definition"> 2nd floor</div>
+			<div class="bookinfo_definition"> 2nd floor <a href="#page_floor_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
 			<div class="bookinfo_term">Floor:</div>
 			
 			{{#if this.collection}}
-			<div class="bookinfo_definition">{{this.collection}}</div>
+			<div class="bookinfo_definition">{{this.collection}} <a href="#page_collections_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
 			<div class="bookinfo_term">Collection:</div>
 			{{/if}}
 
-			<div class="bookinfo_definition bookinfo_highlighted">{{this.callnumber}}</div>
+			<div class="bookinfo_definition bookinfo_highlighted">{{this.callnumber}} <a href="#page_code_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
 			<div class="bookinfo_term">Code:</div>
 
 			
@@ -499,6 +499,75 @@
 				<!--<a id="map_shelf_loc"></a>-->
 				<a id="close_map" href="#" data-rel="back" data-inline="true" data-theme="a" data-icon="delete" data-iconpos="right"><img src="images/x.png" width="30px"/></a>
 				<img id="book_map_large" src="" width="100%" />
+			</div>
+		</div>
+
+        <!-- Floors help -->
+		<div data-role="page" id="page_floor_help">
+			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
+				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
+				<h3>Floors</h3>
+			</div>
+			<div data-role="content">
+
+			</div>
+		</div>
+
+        <!-- Collections help -->
+		<div data-role="page" id="page_collections_help">
+			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
+				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
+				<h3>Collections</h3>
+			</div>			
+			<div data-role="content" class="ui-grid-a">
+				<div class="ui-block-a">
+				<span class="bibsearch_content_strong">2nd floor - The main library (Hangar):</span>
+				<ul>
+					<li>Astr = Astrophysics</li>
+					<li>Kjem = Chemistry</li>
+					<li>Biol = Biology</li>
+					<li>Geo = Geosciences</li>
+					<li>Farm = Pharmacy</li>
+					<li>Mat = Mathematics</li>
+				</ul>
+				<span class="bibsearch_content_strong">Other in the Hangar:</span>
+				<ul>
+					<li>Oppsl = Lookup</li>
+					<li>Pensum = Syllabus</li>
+					<li>Lavergrad = Undergraduate</li>
+				</ul>
+				</div>
+				<div class="ui-block-b">
+				<span class="bibsearch_content_strong">1st mezzanine:</span>
+				<ul>
+					<li>Samling 42</li>
+				</ul>
+				<span class="bibsearch_content_strong">Basement/VBMag:</span>
+				<ul>
+					<li>VBmag = Books/Master theses</li>
+					<li>Doktoravhandling = PhD thesis</li>
+					<li>Avh = Thesis</li>
+					<li>Master</li>
+				</ul>				
+				<span class="bibsearch_content_strong">Other:</span>
+				<ul>
+					<li>Boksamling = Books incorporated into the books collection after November-11 and biology literature after 2006</li>
+					<li>Electronic = Books and articles that are available electronically</li>
+					<li>Tidsskr = 2nd mezzanine and various magazines. New journals (from 2013) in reading corner, west in 1st mezzanine.</li>
+				</ul>				
+				</div>
+
+			</div>
+		</div>
+
+        <!-- Code help -->
+		<div data-role="page" id="page_code_help">
+			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
+				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
+				<h3>Code example</h3>
+			</div>			
+			<div data-role="content" style="text-align:center;">
+			<img src="images/bok.png" style="height:450px;" />
 			</div>
 		</div>
 
