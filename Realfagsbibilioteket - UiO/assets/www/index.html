@@ -69,7 +69,7 @@
 		<script id="book_info_template" type="text/x-handlebars-template">
 					<h3><a href="" id="fav_star_button_link">
 					<img id="fav_star_button" src="star_empty.png"/>
-				</a>{{this.title}}</h3>
+				</a>{{truncate this.title 160}}</h3>
 					<p>by {{#listauthors this.creators}}{{/listauthors}}</p>
 					<div class="ui-grid-a">
 						<div class="ui-block-a">
@@ -146,7 +146,7 @@
 		</script>
 		
 		<script id="directions_bookinfo_template" type="text/x-handlebars-template">
-			<b>{{this.title}}</b><br>
+			<b>{{truncate this.title 160}}</b><br>
 			by {{#listauthors this.creators}}{{/listauthors}}<br><br>
 
 			<a id="zoom_map" href="#page_map"  data-inline="true" data-theme="a" data-icon="fullscreen" data-iconpos="right"><img src="images/fullscreen.png" width="20px"/></a>

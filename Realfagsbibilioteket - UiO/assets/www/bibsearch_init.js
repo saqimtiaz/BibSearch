@@ -31,6 +31,34 @@
 	
 	//
 	//start handlebars custom extensions
+	
+	//Truncates string from https://github.com/ziogas/HandlebarsJS-helpers/blob/master/script.js
+	Handlebars.registerHelper ( 'truncate', function ( str, len ) {
+
+	    if (str.length > len) {
+	        var new_str = str.substr ( 0, len+1 );
+
+	        while ( new_str.length )
+	        {
+	            var ch = new_str.substr ( -1 );
+	            new_str = new_str.substr ( 0, -1 );
+
+	            if ( ch == ' ' )
+	            {
+	                break;
+	            }
+	        }
+
+	        if ( new_str == '' )
+	        {
+	            new_str = str.substr ( 0, len );
+	        }
+
+	        return new Handlebars.SafeString ( new_str +'...' ); 
+	    }
+	    return str;
+	} );	
+	
 	Handlebars.registerHelper('listauthors', function(context, block) {
 		return context.map(function(item) {
 			return item.presentableName;
