@@ -304,7 +304,7 @@
 					Where is it?<img src="map_icon_3.png" class="book_action_button"/>
 				</a>
 																		
-				<a id="button_how_to_access"data-role="button" data-transition="fade" data-theme="c" href="javascript:;">
+				<a id="button_how_to_access"data-role="button" data-transition="fade" data-theme="c" href="#page_how_to_access">
 					How to access it?
 				</a>
 				
@@ -313,6 +313,24 @@
 				</a>
 			</div>
 		</div>		
+
+        <!-- How to access -->
+		<div data-role="page" id="page_how_to_access">
+			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
+				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
+				<h3>How to read ebooks</h3>
+			</div>
+			<div data-role="content" style="padding: 15px">
+				<div id="read_ebooks_container">
+					<p>We recommend that you read ebooks on a computer.</p>
+					<p>On the previous page, use the "share" button to email yourself a link to the ebook and open it on a computer.</p>
+					<p>If the link does not work, make sure you are logged on to UiO's network.</p>
+					<div class="text-align-center">
+						<a href="#" data-role="button" data-rel="back" data-direction="reverse" data-transition="slide">OK</a>
+					</div>
+				</div>
+			</div>
+		</div>	
 
         <!-- Favorites -->
 		<div data-role="page" id="page_favorites">
