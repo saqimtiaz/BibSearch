@@ -229,6 +229,9 @@
 				</ul>
 				</div>
 			</div>
+			<div id="home_about_link">
+				<a href="#page_about">About us</a>
+			</div>
 		</div>
 
 		
@@ -323,6 +326,54 @@
 			</div>
 		</div>	
 
+        <!-- About -->
+		<div data-role="page" id="page_about">
+			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
+				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
+				<h3>About us</h3>
+			</div>
+			<div data-role="content" style="padding: 15px">
+				<div id="about_container">
+					<div class="bibsearch_content_strong">Version 1.0 beta</div>
+					<div>
+						This app was developed as part of the <a href="http://www.ub.uio.no/om/prosjekter/brukerdrevet-innovasjon/">BDI</a> project at the Realfagsbibilioteket at the University of Oslo.
+					</div>
+					<div><a href="#page_license">License and source code.</a></div>
+					<div>Bugs and suggestions can be reported <a href="mailto:bib-lab-drift@ub.uio.no">here.</a></div>
+					<hr>
+					<div><span class="bibsearch_content_strong">Designed by:</span> Therese Slang, Hilde Bakken Reistad, Saq Imtiaz, Lena Drevsjø, Jeongyun Choi.</div>
+				</div>
+			</div>
+		</div>	
+
+        <!-- About -->
+		<div data-role="page" id="page_license">
+			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
+				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
+				<h3>License and source code</h3>
+			</div>
+			<div data-role="content" style="padding: 15px">
+				<div id="license_container">
+					<div style="margin:0.8em;"><span class="bibsearch_content_strong">Application source code:</span> available on <a href="https://github.com/saqimtiaz/BibSearch">github</a> under MIT license.</div>
+					<div style="margin:0.8em;"><span class="bibsearch_content_strong">Contributors:</span>
+						<ul style="margin-top:0;">
+							<li>Saq Imtiaz</li>
+							<li>Hilde Bakken Reistad</li>
+						</ul>
+					</div>
+					<div style="margin:0.8em;"><span class="bibsearch_content_strong">Open-source libraries used:</span>
+						<ul style="margin-top:0;">
+							<li>Jquery</li>
+							<li>Jquery mobile</li>
+							<li>Handlebars</li>
+							<li>Cordova</li>
+							<li>Barcode Scanner</li>
+							<li>Lawnchair</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!--  dialog for deleting favorites -->
 		<div data-role="page" id="favorite_delete">

@@ -513,3 +513,20 @@ a.ui-input-clear {
 	
 }
 
+#home_about_link {
+	text-align: center;
+	margin-top: 0.8em;
+	margin-bottom: 0.8em;
+}
+
+#home_about_link a {
+	color: #000;
+}
+
+#page_about #about_container div {
+	margin:1em 0.8em;
+}
+
+.bibsearch_content_strong {
+	font-weight: bold;
+}
