@@ -37,9 +37,24 @@ $.extend(BookWorms,{
 			
 			data.result.documents[0] = $.extend(data.result.documents[0], book);
 			
-			BookWorms.showBook(data, urlObj, recordId, options);
+			BookWorms.getFloorForBook(data, urlObj, recordId, options);
 
 		});				
+	},
+	
+	getFloorForBook : function(data, urlObj, recordId, options) {
+		var url = "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/loc.php?collection=%22" + encodeURIComponent(data.result.documents[0].collection) + "%22&callnumber=%22" + data.result.documents[0].callnumber + "%22" ;
+		//console.log(0);
+		$.get(url, function(mydata){
+			//console.log(mydata);
+			var bits = mydata.split("\t");
+			//console.log(bits);
+			data.result.documents[0].floor = bits[1];
+			data.result.documents[0].floortext = bits[1] == "1" ? "1st mezzanine" : "2nd floor / Hangar";
+			data.result.documents[0].mapposition = bits[0];
+			BookWorms.showBook(data, urlObj, recordId, options);
+		})
+		
 	},
 	
 	getSectionForCurrentBook : function() {
@@ -88,7 +103,7 @@ $.extend(BookWorms,{
 		//console.log(recordId);
 		window.BookWorms.searchCache[recordId] = data.result.documents[0];
 		window.BookWorms.currentBook = data.result.documents[0];
-		//console.log(BookWorms.searchCache);
+		//console.log(BookWorms.currentBook);
 		var $page = $("#page_books");
 		var source = $("#book_info_template").html();
 		var template = Handlebars.compile(source);

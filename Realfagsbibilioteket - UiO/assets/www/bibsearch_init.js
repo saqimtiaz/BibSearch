@@ -149,6 +149,7 @@
 			timeOut: 10000,
 		  
 			error: function(jqXHR, textStatus, errorThrown) {
+				//console.log(jqXHR,textStatus,errorThrown);
 				alert("There was an error connecting to the server, please check your internet connection.");
 		  		$.mobile.hidePageLoadingMsg();
 				$('#block-ui').hide();
@@ -225,6 +226,11 @@
 			// this is the home page, each time it is going to be shown we want to refresh the list of favorites.
 			if (u.hash == "" || u.hash == "#page_home") {
 				BookWorms.updateHomeFavorites();
+				return;
+			}
+			
+			if (u.hash == "#page_floor_help") {
+				$("#floor_help_illustration").attr("src","images/floor" + window.BookWorms.currentBook.floor + ".png");
 				return;
 			}
 

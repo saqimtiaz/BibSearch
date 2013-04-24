@@ -105,7 +105,7 @@
 							Floor:
 						</div>
 						<div class="ui-block-b"  style="margin-top:10px;">
-							2nd floor <a href="#page_floor_help"><img class="questionmark" src="images/questionmark.png" /></a>
+							{{this.floortext}} <a href="#page_floor_help"><img class="questionmark" src="images/questionmark.png" /></a>
 						</div>
 						
 						{{#if this.collection}}
@@ -155,7 +155,7 @@
 			</a>
 
 			
-			<div class="bookinfo_definition"> 2nd floor <a href="#page_floor_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
+			<div class="bookinfo_definition"> {{this.floortext}} <a href="#page_floor_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
 			<div class="bookinfo_term">Floor:</div>
 			
 			{{#if this.collection}}
@@ -509,7 +509,7 @@
 				<h3>Floors</h3>
 			</div>
 			<div data-role="content">
-
+				<img id="floor_help_illustration" src="images/floor1.png" width="100%" />
 			</div>
 		</div>
 
