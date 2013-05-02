@@ -115,12 +115,15 @@
 	
 	//global object to hold all custom code.
 	window.BookWorms = {
+			platform : null,
 			searchCache: {}
 	};
 	
 	// hook in before JQM initializes and setup defaults and initialize lawnchair
 	$(document).bind("mobileinit", function(){
 	
+
+		
 		//window.share = new Share();
 		$.mobile.defaultPageTransition = "none";
 		BookWorms.DB =  new Lawnchair(function(){});
@@ -158,12 +161,48 @@
 	});	
 
 	
+	document.addEventListener("deviceready", function(){
+		
+		if (device && device.platform) {
+			BookWorms.platform = device.platform.replace(/\s+Simulator$/, "");
+		}
+		//alert("ready");
+	/*	
+		if(BookWorms.platform == "Android") {
+			$(".logo_home_button").click(function(e){
+				history.back();
+			});
+		}
+		*/
+	});
+	
+	
 	//always make sure that a pageshow results in the loading message being hidden and the UI blocking disabled.
 	// we need this since we manually show a message and block the UI to prevent multiple actions when network connectivity is slow
 	$(document).bind("pageshow", function(e,data) {
 		$(this).addClass('ui-page-active');
 		$.mobile.hidePageLoadingMsg();
 		$('#block-ui').hide();
+		
+		//alert(BookWorms.platform);
+		if (BookWorms.platform== "Android") {
+			
+			$(".logo_home_button").unbind("click").click(function(e){
+				//console.log("2");
+				//console.log(this);
+				//history.back();
+				$.mobile.changePage("index.html");
+				return false;
+			});		
+		} else {
+			$(".logo_home_button").unbind("click").click(function(e){
+				//console.log("2");
+				//console.log(this);
+				history.back();
+				return false;
+			});	
+			
+		}
 	});
 
 	
