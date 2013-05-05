@@ -51,6 +51,7 @@ $.extend(BookWorms,{
 			var bits = mydata.split("\t");
 			//console.log(bits);
 			data.result.documents[0].floor = bits[1];
+			//XXX needs fixing, basement books show as 2nd floor
 			data.result.documents[0].floortext = bits[1] == "1" ? "1st mezzanine" : "2nd floor / Hangar";
 			data.result.documents[0].mapposition = bits[0];
 			BookWorms.showBook(data, urlObj, recordId, options);
@@ -133,13 +134,23 @@ $.extend(BookWorms,{
 			$("#button_where_is_it").removeClass("ui-disabled");
 		}
 		
+		var missing = false;
+		
 		if (window.BookWorms.currentBook["material"] == "electronic") {
 			$("#button_where_is_it").hide();
 			$("#button_how_to_access").show();
 		} else {
-			$("#button_where_is_it").show();
-			$("#button_how_to_access").hide();
-			//console.log(data.result.documents[0]);
+			
+			if(jQuery.inArray(window.BookWorms.currentBook["collection"],BookWorms.collections)!= -1) {
+			
+				$("#button_where_is_it").show();
+				$("#button_how_to_access").hide();
+				//console.log(data.result.documents[0]);
+			} else {
+				$("#button_where_is_it").show();
+				$("#button_how_to_access").hide();
+				missing = true;
+			}
 			
 			
 			
@@ -148,7 +159,13 @@ $.extend(BookWorms,{
 			//var locinfo = BookWorms.getSectionForCurrentBook();
 			//$("#book_map").attr("src", "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/imgtest-saq.php?collection=%22Farm.%22&callnumber=%2210.80%22PER%22" );
 			//$("#book_shelf_map").attr("src", "images/shelf" + locinfo[1] + ".png" );
-			var s = $("#directions_bookinfo_template").html();
+			var s;
+			console.log("missing: " + missing);
+			if (!missing) {
+				s = $("#directions_bookinfo_template").html();
+			} else {
+				s = $("#directions_bookinfo_template_missing").html();				
+			}
 			var t = Handlebars.compile(s);
 			//data.result.documents[0]["shelf"] = locinfo[1];
 			var h = t(data.result.documents[0]);

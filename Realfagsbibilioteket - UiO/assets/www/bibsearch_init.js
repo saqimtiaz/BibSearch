@@ -283,43 +283,6 @@
 				$("#book_map_large").attr("src", url + orientation );
 				$("#book_map").attr("src", url );
 				
-				/*
-				var subject = b.collection;
-				if (BookCollections[b.collection] == undefined) {
-					alert("This subject has not been mapped for the prototype, try a book in Physics instead");
-					e.preventDefault();
-					return false;							
-				} else {
-					var callnr = b.callnumber;
-					var emnenr = callnr.split(" ")[0];
-					var locnr = callnr.split(" ")[1];
-					var emne = BookCollections[b.collection][emnenr];
-					//console.log(emne);
-					var section;
-					var shelf;
-					$.each(emne.sectionmap, function(key,value) {
-						//console.log(key,value);
-						if (value.start <= locnr && value.end >= locnr) {
-							//console.log(key);
-							section = key;
-							return false;
-						}
-					});
-					//console.log(section);
-					
-					$.each(emne.sectionmap[section].shelves, function(key,value) {
-						//console.log(key);
-						if (value.start <= locnr && value.end >= locnr) {
-							shelf = key;
-						}
-					});
-					
-					//console.log(shelf);
-					//$("#map_shelf_loc").html("Section: " + section + ", shelf: " + shelf);
-					$("#book_map_large").attr("src", "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/imgtest-saq.php?collection=%22Farm.%22&callnumber=%2210.80%22PER%22&orientation=v" );
-					
-				}
-				*/
 			}
 			
 		}

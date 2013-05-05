@@ -168,6 +168,13 @@
 
 			
 		</script>
+		
+		<script id="directions_bookinfo_template_missing" type="text/x-handlebars_template">
+			<b>{{truncate this.title 160}}</b><br>
+			by {{#listauthors this.creators}}{{/listauthors}}<br><br>
+			<p>We have no maps for this collection, please consult a librarian to help you find this book.</p>
+		</script>
+		
 		<!--  end handelbars templates -->
 		
 	</head>
@@ -303,6 +310,7 @@
 				<a id="button_where_is_it" data-role="button" data-transition="fade" data-theme="c" href="#page_book_directions">
 					Where is it?<img src="map_icon_3.png" class="book_action_button"/>
 				</a>
+				
 																		
 				<a id="button_how_to_access"data-role="button" data-transition="fade" data-theme="c" href="#page_how_to_access">
 					How to access it?
@@ -491,6 +499,26 @@
 			</div>
 		</div>	
 	
+        <!-- Book Directions Missing -->
+		<div data-role="page" id="page_book_directions_missing">
+			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
+				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
+				<h3>Directions</h3>
+				<a class="search_button header_button" href="#page_search_results"><img src="search.png" width="26px"/></a>
+			</div>
+			<div data-role="content" style="padding: 15px">
+				<div>
+				<!--  
+					<a id="zoom_map" href="#page_map" data-role="button" data-inline="true" data-theme="a" data-icon="fullscreen" data-iconpos="right">zoom</a>
+					<a href="#page_map" data-transition="fade">
+						<img id="book_map" src="" width="100%"/>
+					</a>
+					-->
+				</div>
+				<div id="directions_book_info"></div>
+				
+			</div>
+		</div>	
 
         <!-- Large book map -->
 		<div data-role="page" id="page_map">
@@ -575,7 +603,7 @@
 
 		<div id="block-ui">
 		</div>
-		
+		<script src="http://app.uio.no/ub/bdi/bibsearch/getcollections.php"></script>
 		<script src="bibsearch.js"></script>
 		
 		<!--
