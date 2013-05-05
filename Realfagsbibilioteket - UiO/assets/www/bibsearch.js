@@ -52,7 +52,16 @@ $.extend(BookWorms,{
 			//console.log(bits);
 			data.result.documents[0].floor = bits[1];
 			//XXX needs fixing, basement books show as 2nd floor
-			data.result.documents[0].floortext = bits[1] == "1" ? "1st mezzanine" : "2nd floor / Hangar";
+			
+			if (bits[1] == "1") {
+				data.result.documents[0].floortext = "1st mezzanine";
+			} else if (bits[1] == "2") {
+				data.result.documents[0].floortext = "2nd floor / Hangar"
+			} else {
+				data.result.documents[0].floortext = "";
+			}
+			
+//			data.result.documents[0].floortext = bits[1] == "1" ? "1st mezzanine" : "2nd floor / Hangar";
 			data.result.documents[0].mapposition = bits[0];
 			BookWorms.showBook(data, urlObj, recordId, options);
 		})
@@ -132,6 +141,11 @@ $.extend(BookWorms,{
 		} else {
 			$("#status_indicators").addClass("book_available").removeClass("book_unavailable").removeClass("book_ordered");
 			$("#button_where_is_it").removeClass("ui-disabled");
+		}
+		if (window.BookWorms.currentBook.floortext == "") {
+			$("#floor_help_link").hide();
+		} else {
+			$("#floor_help_link").show();
 		}
 		
 		var missing = false;
