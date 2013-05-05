@@ -277,8 +277,8 @@
 				
 				
 				var b = window.BookWorms.currentBook;
-				
-				var url = "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/imgtest.php?collection=%22" + b.collection + "%22&callnumber=%22" + b.callnumber + "%22";
+
+				var url = "http://app.uio.no/ub/bdi/bibsearch/index.php?collection=%22" + b.collection + "%22&callnumber=%22" + b.callnumber + "%22";
 				var orientation = "&orientation=v";
 				$("#book_map_large").attr("src", url + orientation );
 				$("#book_map").attr("src", url );

@@ -43,7 +43,8 @@ $.extend(BookWorms,{
 	},
 	
 	getFloorForBook : function(data, urlObj, recordId, options) {
-		var url = "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/loc.php?collection=%22" + encodeURIComponent(data.result.documents[0].collection) + "%22&callnumber=%22" + data.result.documents[0].callnumber + "%22" ;
+		
+		var url = "http://app.uio.no/ub/bdi/bibsearch/loc.php?collection=%22" + encodeURIComponent(data.result.documents[0].collection) + "%22&callnumber=%22" + data.result.documents[0].callnumber + "%22" ;
 		//console.log(0);
 		$.get(url, function(mydata){
 			//console.log(mydata);
