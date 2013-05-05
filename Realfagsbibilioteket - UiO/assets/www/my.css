@@ -552,8 +552,13 @@ a.ui-input-clear {
 	margin-top:0;
 }
 
+#page_collections_help .ui-block-a {
+	border-right: 1px solid #000000;
+	padding-right:5px;
+	
+}
+
 #page_collections_help .ui-block-b {
-	border-left: 1px solid #000000;
-	padding-left:10px;
+	padding-left:5px;
 	
 }
