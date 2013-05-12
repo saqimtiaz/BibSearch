@@ -165,7 +165,19 @@
 		
 		if (device && device.platform) {
 			BookWorms.platform = device.platform.replace(/\s+Simulator$/, "");
+                              if (BookWorms.platform != "Android") {
+                              console.log(0);
+                              $(document).on("click",".external", function(e){
+                                             e.preventDefault();
+                                             var targetURL = $(this).attr("href");
+                                             window.open(targetURL, "_system");
+                                             return false;
+                                             });
+                              }
+                              
+                              console.log(BookWorms.platform);
 		}
+                              
 		//alert("ready");
 	/*	
 		if(BookWorms.platform == "Android") {

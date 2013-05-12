@@ -425,14 +425,23 @@ $.extend(BookWorms,{
 		}).join(", ");
 						
 		var url = "http://openurl.bibsys.no/bibsysx/openurl?" + book.openurlRepresentation;
-		
-		window.plugins.share.show({
-		    subject: book.title,
-		    text: book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url },
-		    function() {}, // Success function
-		    function() {alert('Share failed')} // Failure function
-		
-		);
+         //windows.plugins.social.share(url);
+         //console.log(url);
+         //console.log(windows.plugins);
+         //console.log(windows.plugins.social);
+         if (BookWorms.platform=="Android"){
+            window.plugins.share.show({
+                subject: book.title,
+                text: book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url },
+                function() {}, // Success function
+                function() {alert('Share failed')} // Failure function
+            
+            );
+         } else {
+         console.log(99);
+ //        window.plugins.social.share("hi","","");
+           window.plugins.social.share(book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url,url,"");
+         }
 	}
 	
 });
