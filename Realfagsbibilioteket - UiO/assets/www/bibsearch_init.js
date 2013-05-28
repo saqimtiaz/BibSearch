@@ -234,6 +234,10 @@
 
 			if ( u.hash.search(re) !== -1 ) {
 
+				if (u.hash.indexOf("?") == -1) {
+					return true;
+				}
+
 				// We're being asked to display the items for a specific search
 				// Fetch the search results from the server, the callback will handle the page display
 				$.mobile.showPageLoadingMsg();
