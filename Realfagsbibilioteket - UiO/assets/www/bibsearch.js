@@ -229,7 +229,7 @@ $.extend(BookWorms,{
 	//XXX pressing enter should start search
 	getSearchResults : function(urlObj, options) {
 		if (urlObj.hash.indexOf("?") == -1) {
-			showSearchResults(undefined,undefined,undefined,urlObj,options);
+			BookWorms.showSearchResults(undefined,undefined,undefined,urlObj,options);
 			return;
 		}
 		var query = urlObj.hash.split("?")[1];
