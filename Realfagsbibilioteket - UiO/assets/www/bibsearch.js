@@ -400,17 +400,86 @@ $.extend(BookWorms,{
 		}
 	},
 
+	validIsbn10: function(isbn) {
+		var n, i, sum = 0;
+		isbn = isbn.toString(); // make sure it's a string
+		if (isbn.length !== 10) return false;
+		for (i=0; i < 10; i++) {
+			n = (isbn[i] === 'X') ? 10 : parseInt(isbn[i]);
+			sum += n * (10-i);
+		}
+		return sum % 11 === 0;
+	},
+
+	validIsbn13: function(isbn) {
+		var check, i;
+		isbn = isbn.toString(); // make sure it's a string
+		if (isbn.length !== 13) return false;
+		check = 0;
+		for (i = 0; i < 13; i += 2) {
+			check += parseInt(isbn[i]);
+		}
+		for (i = 1; i < 12; i += 2){
+			check += 3 * parseInt(isbn[i]);
+		}
+		return check % 10 === 0;
+	},
+
+	searchByRecordId: function(knyttdokid) {
+		var url = "http://labs.biblionaut.net/services/getids.php?" + window.JSONP + "&id=" + knyttdokid;
+		$.getJSON(url, function (data) {
+			$("#searchinput1").val('bs.objektid="' + data.objektid + '"');
+			$("#search_button").click();
+		})
+		.error(function(){
+			$.mobile.hidePageLoadingMsg();
+			$('#block-ui').hide();
+		});
+	},
+
 	scanNow : function() {
 		window.plugins.barcodeScanner.scan(
 			function(result) {
-		    	//alert("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format); 
-		    	console.log(0);
-				$("#searchinput1").val(result.text);
-				$("#search_button").click();
+				//alert("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format); 
+				console.log(0);
+				var barcode = result.text,
+					format = 'unknown';
+				// Only numerals?
+
+				if (barcode.match('[0-9X]+')[0] === barcode) {
+					if (barcode.length === 10) {
+						format = 'isbn10';
+						if (!BookWorms.validIsbn10(barcode)) {
+							alert("Bad reading; not a valid ISBN-10 number. Please try again.");
+							return;
+						}
+					} else if (barcode.length === 13) {
+						format = 'isbn13';
+						if (!BookWorms.validIsbn13(barcode)) {
+							alert("Bad reading; not a valid ISBN-13 number. Please try again.");
+							return;
+						}
+					} 
+				} else {
+					if (barcode.length === 9) {
+						format = 'dokid'; // dokid eller knyttid
+					}
+				}
+				if (format === 'isbn10' || format === 'isbn13') {
+					$("#searchinput1").val('bs.isbn="' + barcode + '"');
+					$("#search_button").click();
+				} else if (format === 'dokid') {
+					BookWorms.searchByRecordId(barcode);
+					return;
+				} else {
+					alert("Unknown barcode format found.");
+					return;
+				}
 			}, 
 			function(error) {
-	    		alert("Scanning failed: " + error);
-		});
+			alert("Scanning failed: " + error);
+			}
+		);
 	},		
 
 	shareBook : function() {
