@@ -25,18 +25,27 @@ $.extend(BookWorms,{
 		var baseURI = "https://ask.bibsys.no/ask2/json/items.jsp?objectid=";
 		//var jsonp = "&jsonp=?";
 		//var jsonp = "";
+		var firstbook="";
 
 		$.getJSON(baseURI + encodeURIComponent(recordId) + "&" + window.JSONP, function(mydata) {
 			var docs = mydata.result.documents;
 			var filtered = $.grep(docs, function(n, i) {
-				return n.institutionsection == "UREAL" ? true : false;
+				
+				if (n.institutionsection == "UREAL" && firstbook == ""){
+					firstbook = n;
+				}
+				
+				return (n.institutionsection == "UREAL"  && n.lending_status != "UTL") ? true : false;
 			});
-			//XXX only showing first book
 
-			var book = filtered[0];
-			
+			//XXX only showing first book [OLD]
+			//XXX Changed to prioritizing the first book with lending status avaiable. If no book found with lending status avaiable show first book found from UREAL
+
+			if (filtered[0]) var book = filtered[0];
+			else var book = firstbook;
+		
 			data.result.documents[0] = $.extend(data.result.documents[0], book);
-			
+
 			BookWorms.getFloorForBook(data, urlObj, recordId, options);
 
 		});				
