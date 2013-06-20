@@ -38,6 +38,7 @@
 									<h3>{{this.title}}</h3>
 									<p>{{#listauthors this.creators}}{{/listauthors}}</p>
 									<p class="ui-li-aside"><strong>{{this.year}}</strong>{{#ifCond this.material "electronic"}}<img src="ebook-icon.png"/>{{/ifCond}}</p>
+									<p class="ui-li-aside"><strong>{{this.year}}</strong>{{#ifCond this.material "book_electronic"}}<img src="ebook-icon.png"/>{{/ifCond}}</p>
 								</a>
 							</li>
 					{{/each}}

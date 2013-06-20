@@ -251,10 +251,10 @@ $.extend(BookWorms,{
 		
 		if (window.BookWorms.includeEbooks == "off") {
 			//url = "https://ask.bibsys.no/ask2/json/result.jsp?jsonp=?" + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL")&page=' + page;
-			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL")&page=' + page;
+			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=%22" + term + '%22%20AND%20(bs.avdeling%20=%20"UREAL")&page=' + page;
 		} else {
 			//url = "https://ask.bibsys.no/ask2/json/result.jsp?jsonp=?" + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))&page=' + page;
-			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))&page=' + page;
+			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=%22" + term + '%22%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))&page=' + page;
 		}
 		
 		$.getJSON(url, function (data) {

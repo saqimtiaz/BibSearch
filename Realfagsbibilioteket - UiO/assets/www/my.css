@@ -467,6 +467,10 @@ a.ui-input-clear {
 	padding-top: 5px;
 }
 
+#how_to_scan {
+	font-size:90%;
+}
+
 #how_to_scan_desc {
 	margin:0 0 0.4em;
 	padding-left: 15px;
