@@ -33,27 +33,22 @@
 				<div id="search_results_count">{{this.totalHits}} {{pluralize this.totalHits "result" "results"}}</div>
 				<ul data-role="listview" data-divider-theme="b" data-inset="false" id="search_results">
 					{{#each documents}}
+						{{#ifItemType this.material "electronic"}}
+							
 							<li data-theme="c">
 								<a href="#page_books?{{this.recordId}}"  data-transition="slide">
 									<h3>{{this.title}}</h3>
 									<p>{{#listauthors this.creators}}{{/listauthors}}</p>
 									<p class="ui-li-aside"><strong>{{this.year}}</strong>
 
-										{{#ifCond this.material "electronic"}}
+										{{#ifContains this.material "electronic"}}
 											<img src="ebook-icon.png"/>
-								
-										{{/ifCond}}
+										{{/ifContains}}
 
-										{{#ifCond this.material "book_electronic"}}
-												<img src="ebook-icon.png"/>
-										{{/ifCond}}
-
-										{{#ifCond this.material "journal_electronic"}}
-												<img src="ebook-icon.png"/>
-										{{/ifCond}}
 									</p>
 								</a>
 							</li>
+						{{/ifItemType}}
 					{{/each}}
 				</ul>
 			{{else}}
@@ -114,7 +109,7 @@
 							{{#bookformat this.material}}{{/bookformat}}
 						</div>
 
-						{{#unlessCond this.material "electronic"}}	
+						{{#unlessContains this.material "electronic"}}	
 
 						
 						<div class="ui-block-a" style="margin-top:10px;"> 
@@ -140,7 +135,7 @@
 							{{this.callnumber}} <a href="#page_code_help"><img class="questionmark" src="images/questionmark.png" /></a>
 						</div>
 
-						{{/unlessCond}}
+						{{/unlessContains}}
 					</div>		
 		</script>		
 

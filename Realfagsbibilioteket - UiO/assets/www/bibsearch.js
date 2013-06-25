@@ -159,7 +159,7 @@ $.extend(BookWorms,{
 		
 		var missing = false;
 		
-		if (window.BookWorms.currentBook["material"] == "electronic") {
+		if (window.BookWorms.currentBook["material"].indexOf("electronic")>-1) {
 			$("#button_where_is_it").hide();
 			$("#button_how_to_access").show();
 		} else {

@@ -72,7 +72,10 @@
 	});
 
 	Handlebars.registerHelper('bookformat', function(context, block) {
-		return context == "electronic" ? "Electronic" : "Printed";
+		if (context=="book_electronic")		return "Electronic book";
+		if (context=="journal_electronic")	return "Electronic journal";
+		if (context=="electronic")			return "Electronic resource";
+		return "Printed";
 	});
 	
 	Handlebars.registerHelper('pluralize', function(number, single, plural) {
@@ -83,6 +86,37 @@
 			return plural; 
 		}
 	});
+
+	Handlebars.registerHelper('ifContains', function(v1, v2, options) {
+	  //v1 = haystack
+	  //v2 = needle
+	  if (v1.indexOf(v2)>-1) {
+		return options.fn(this);
+	  } else {
+		return options.inverse(this);
+	  }
+	});	
+
+	Handlebars.registerHelper('ifItemType', function(v1, v2, options) {
+	  //v1 = haystack
+	  //v2 = needle
+
+	  if (v1.indexOf(v2)>0 && window.BookWorms.includeEbooks == "off"){
+		return options.inverse(this);
+	  }
+	  else 	return options.fn(this);
+	});	
+	
+
+	Handlebars.registerHelper('unlessContains', function(v1, v2, options) {
+	  //v1 = haystack
+	  //v2 = needle
+	  if (v1.indexOf(v2)<0) {
+		return options.fn(this);
+	  } else {
+		return options.inverse(this);
+	  }
+	});	
 	
 	Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 	  if(v1 == v2) {
