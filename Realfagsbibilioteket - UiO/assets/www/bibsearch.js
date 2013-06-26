@@ -246,20 +246,27 @@ $.extend(BookWorms,{
 		var term = parameters[0].split("=")[1];
 		var page = parameters[1].split("=")[1];
 		//XXX add timestamp
-		
-		var url;
-		
-		if (window.BookWorms.includeEbooks == "off") {
-			//url = "https://ask.bibsys.no/ask2/json/result.jsp?jsonp=?" + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL")&page=' + page;
-			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=%22" + term + '%22%20AND%20(bs.avdeling%20=%20"UREAL")&page=' + page;
-		} else {
-			//url = "https://ask.bibsys.no/ask2/json/result.jsp?jsonp=?" + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))&page=' + page;
-			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=%22" + term + '%22%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))&page=' + page;
+
+		var cql, url;
+
+		if (term.substr(0,3) !== 'bs.') {
+			cql = '%22' + term + '%22';
+		} else { 
+			// The term is already valid CQL, for instance 'bs.objektid="...."', 'bs.isbn="...."'
+			// so we don't have to escape it
+			cql = term;
+			term = '';  // clear search field to avoid showing complex search query to the user
 		}
-		
+
+		if (window.BookWorms.includeEbooks == "off") {
+			cql += '%20AND%20(bs.avdeling%20=%20"UREAL")';
+		} else {
+			cql += '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))';
+		}
+		url = 'https://ask.bibsys.no/ask2/json/result.jsp?' + window.JSONP + '&cql=' + cql + '&page=' + page;
 		$.getJSON(url, function (data) {
 			BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
-		});				
+		});
 	},
 
 	showSearchResults : function(data,term,pagenr,urlObj,options,query) {
@@ -435,15 +442,23 @@ $.extend(BookWorms,{
 	},
 
 	searchByRecordId: function(knyttdokid) {
-		var url = "http://labs.biblionaut.net/services/getids.php?" + window.JSONP + "&id=" + knyttdokid;
+		var url = "http://biblionaut.net/services/getids.php?" + window.JSONP + "&id=" + knyttdokid;
 		$.getJSON(url, function (data) {
-			$("#searchinput1").val('bs.objektid="' + data.objektid + '"');
-			$("#search_button").click();
+			if (data.objektid === '') {
+				alert("Sorry, this barcode could not be searched");
+			} else {
+				$("#searchinput2").val('bs.objektid="' + data.objektid + '"');
+				$("#home_search_button").click();
+			}
 		})
 		.error(function(){
 			$.mobile.hidePageLoadingMsg();
 			$('#block-ui').hide();
 		});
+	},
+	
+	unknownBarcodeFound: function(barcode) {
+		 $.mobile.changePage("#unknown_barcode", {transition: 'none', role: 'dialog'});
 	},
 
 	scanNow : function() {
@@ -455,7 +470,8 @@ $.extend(BookWorms,{
 					format = 'unknown';
 				// Only numerals?
 
-				if (barcode.match('[0-9X]+')[0] === barcode) {
+				var tmp = barcode.match('^[0-9X]{10,13}$');
+				if (tmp && tmp[0] === barcode) {
 					if (barcode.length === 10) {
 						format = 'isbn10';
 						if (!BookWorms.validIsbn10(barcode)) {
@@ -469,24 +485,22 @@ $.extend(BookWorms,{
 							return;
 						}
 					} 
-				} else {
-					if (barcode.length === 9) {
-						format = 'dokid'; // dokid eller knyttid
-					}
+				} else if (barcode.length === 9 && barcode.match('^[0-9]{2}')) {
+					format = 'dokid'; // dokid eller knyttid
 				}
 				if (format === 'isbn10' || format === 'isbn13') {
-					$("#searchinput1").val('bs.isbn="' + barcode + '"');
-					$("#search_button").click();
+					$("#searchinput2").val('bs.isbn="' + barcode + '"');
+					$("#home_search_button").click();
 				} else if (format === 'dokid') {
 					BookWorms.searchByRecordId(barcode);
 					return;
 				} else {
-					alert("Unknown barcode format found.");
+					BookWorms.unknownBarcodeFound(barcode);
 					return;
 				}
 			}, 
 			function(error) {
-			alert("Scanning failed: " + error);
+				alert("Scanning failed: " + error);
 			}
 		);
 	},		
