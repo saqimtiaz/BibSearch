@@ -35,7 +35,7 @@ $.extend(BookWorms,{
 					firstbook = n;
 				}
 				
-				return (n.institutionsection == "UREAL"  && n.lending_status != "UTL") ? true : false;
+				return (n.institutionsection == "UREAL"  && n.lending_status != "UTL"  && n.lending_status != "UTL/RES") ? true : false;
 			});
 
 			//XXX only showing first book [OLD]
@@ -141,7 +141,7 @@ $.extend(BookWorms,{
 		
 		$("#fav_star_button_link").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
 		$("#favorite_book_button").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
-		if (data.result.documents[0].lending_status == "UTL") {
+		if (data.result.documents[0].lending_status == "UTL" || data.result.documents[0].lending_status == "UTL/RES") {
 			$("#status_indicators").addClass("book_unavailable").removeClass("book_available").removeClass("book_ordered");
 			$("#button_where_is_it").addClass("ui-disabled");
 		} else if (data.result.documents[0].status == "best" || data.result.documents[0].status == "akset") {
@@ -265,7 +265,30 @@ $.extend(BookWorms,{
 		}
 		url = 'https://ask.bibsys.no/ask2/json/result.jsp?' + window.JSONP + '&cql=' + cql + '&page=' + page;
 		$.getJSON(url, function (data) {
-			BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
+			
+			// If UREAL had an object, but it has been lost (status: 'tapt') or taken out of collection 
+			// (status: 'kass'), the Ask2 API still returns the object on a search limited to UREAL, 
+			// but the UREAL item(s) are not returned. Items from other libraries will still show up, 
+			// so if the list contains only items from other libraries (or no items at all), it means we 
+			// had the object at some time, but no more, and we should remove it from the result list.
+			data.result.documents = $.grep(data.result.documents, function(n, i) {
+				return (n.institutionsection == "UREAL") ? true : false;
+			});
+			data.result.totalHits = data.result.documents.length;
+
+			if (data.result.totalHits == 0)
+			{
+				BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
+			}
+			else {
+
+				// For series items, we need to lookup the series title before showing the search results
+				window.BookWorms.checkSearchResultsForSeriesTitles(data.result.documents, function() {
+					// callback function when all series titled have been looked up
+					BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
+				});
+			}
+
 		});
 	},
 
@@ -340,6 +363,64 @@ $.extend(BookWorms,{
 			//if (window.BookWorms.nextPage == urlObj.href)
 				$.mobile.changePage( $page, options );	
 		}			
+	},
+
+	checkSearchResultsForSeriesTitles : function(documents, onDone) {
+		// We loop through the result list and check if any of the objects 
+		// are series item. For each series item, we need to make an ajax call,
+		// and we keep track of the remaining pending tasks with a variable
+		// When there are no more remaining tasks pending, we call onDone()
+		window.BookWorms.pendingTasks = 0;
+		$.each(documents, function(index, val) {
+			window.BookWorms.checkitemForSeriesTitle(val, function() {
+				if (window.BookWorms.pendingTasks === 0) {
+					onDone();
+				}
+			});
+		});
+
+	},
+
+	checkitemForSeriesTitle: function(doc, onDone) {
+
+		window.BookWorms.pendingTasks += 1;
+
+		if (doc.series != '') {
+			// This object is a series item. We look up the series title
+			var url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=bs.objektid%3D%22" + doc.series[0].seriesrecordcontrolnumber + '%22%20AND%20(bs.avdeling%20=%20"UREAL")';
+			$.getJSON(url, function (mydata) {
+				
+				var seriesTitle = mydata.result.documents[0].title,
+					seriesVol = doc.series[0].sortingvolume,
+					docTitle = doc.title;
+				
+				if (docTitle === '') {
+					doc.title = seriesTitle;
+					if (seriesVol !== undefined && seriesVol !== '') {
+						doc.title += ' (vol. ' + seriesVol + ')';
+					}
+				} else {
+					doc.title = docTitle;
+					if (seriesVol !== '') {
+						doc.title += ' – vol. ' + seriesVol;
+					}
+					if (seriesTitle !== '') {
+						doc.title += ' in ' + seriesTitle; 
+					}
+				}
+				window.BookWorms.checkForSeriesDone(doc, onDone);
+			})
+		}
+		else {
+			// This object is not a series item. Move on
+			window.BookWorms.checkForSeriesDone(doc, onDone);
+		}
+	},
+
+	checkForSeriesDone: function(doc, onDone) {
+		window.BookWorms.pendingTasks -= 1;
+		window.BookWorms.searchCache[doc.recordId] = doc;
+		onDone();
 	},
 
 	updateHomeFavorites : function() {
