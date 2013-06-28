@@ -393,9 +393,9 @@ $.extend(BookWorms,{
 
 	checkitemForSeriesTitle: function(doc, onDone) {
 
-		if (doc.series != '') {
+		if (doc.series.length != 0) {
 			// This object is a series item. We look up the series title
-			var url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=bs.objektid%3D%22" + doc.series[0].seriesrecordcontrolnumber + '%22%20AND%20(bs.avdeling%20=%20"UREAL")';
+			var url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=bs.objektid%3D%22" + doc.series[0].seriesrecordcontrolnumber + '%22';
 			$.getJSON(url, function (mydata) {
 				
 				var seriesTitle = mydata.result.documents[0].title,
@@ -413,7 +413,11 @@ $.extend(BookWorms,{
 						doc.title += ' – vol. ' + seriesVol;
 					}
 					if (seriesTitle !== '') {
-						doc.title += ' in ' + seriesTitle; 
+						// Seems like BIBSYS sometimes returns the series title for the issue title(!)
+						// Example: objektid/record id=111115582
+						if (docTitle !== seriesTitle) {
+							doc.title += ' in ' + seriesTitle; 
+						}
 					}
 				}
 				window.BookWorms.checkForSeriesDone(doc, onDone);
