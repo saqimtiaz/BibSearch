@@ -53,7 +53,7 @@ $.extend(BookWorms,{
 			}
 			else {
 				if (firstbook == "") {
-					book = {status: "TAPT"};
+					book = {lending_status: "TAPT"};
 				}
 				else {
 					book = firstbook;
@@ -157,10 +157,10 @@ $.extend(BookWorms,{
 		
 		$("#fav_star_button_link").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
 		$("#favorite_book_button").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
-		if ($.inArray(data.result.documents[0].lending_status, ["UTL", "UTL/RES", "TAPT"])) {
+		if ($.inArray(data.result.documents[0].lending_status, ["UTL", "UTL/RES", "TAPT"]) !== -1) {
 			$("#status_indicators").addClass("book_unavailable").removeClass("book_available").removeClass("book_ordered");
 			$("#button_where_is_it").addClass("ui-disabled");
-		} else if ($.inArray(data.result.documents[0].status, ["best", "akset"])) {
+		} else if ($.inArray(data.result.documents[0].status, ["best", "akset"]) !== -1) {
 			$("#status_indicators").addClass("book_ordered").removeClass("book_available").removeClass("book_unavailable");
 			$("#button_where_is_it").addClass("ui-disabled");
 		} else {
@@ -376,7 +376,7 @@ $.extend(BookWorms,{
 		// are series item. For each series item, we need to make an ajax call,
 		// and we keep track of the remaining pending tasks with a variable
 		// When there are no more remaining tasks pending, we call onDone()
-		window.BookWorms.pendingTasks = 0;
+		window.BookWorms.pendingTasks = documents.length;
 		$.each(documents, function(index, val) {
 			window.BookWorms.checkitemForSeriesTitle(val, function() {
 				if (window.BookWorms.pendingTasks === 0) {
@@ -388,8 +388,6 @@ $.extend(BookWorms,{
 	},
 
 	checkitemForSeriesTitle: function(doc, onDone) {
-
-		window.BookWorms.pendingTasks += 1;
 
 		if (doc.series != '') {
 			// This object is a series item. We look up the series title
