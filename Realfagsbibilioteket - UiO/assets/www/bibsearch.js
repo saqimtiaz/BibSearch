@@ -19,7 +19,7 @@ $.extend(BookWorms,{
 			
 		}
 	},
-	
+
 	getDetailedBookInfo : function(data, urlObj, recordId, options) {
 		
 		var baseURI = "https://ask.bibsys.no/ask2/json/items.jsp?objectid=";
@@ -30,11 +30,15 @@ $.extend(BookWorms,{
 		$.getJSON(baseURI + encodeURIComponent(recordId) + "&" + window.JSONP, function(mydata) {
 			var docs = mydata.result.documents;
 			var filtered = $.grep(docs, function(n, i) {
-				
+
+				if (data.result.documents[0].material.indexOf('electronic') !== -1) {
+					return true;
+				}
+
 				if (n.institutionsection == "UREAL" && firstbook == ""){
 					firstbook = n;
 				}
-				
+
 				return (n.institutionsection == "UREAL"  && n.lending_status != "UTL"  && n.lending_status != "UTL/RES") ? true : false;
 			});
 
