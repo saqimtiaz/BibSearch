@@ -39,10 +39,26 @@ $.extend(BookWorms,{
 			});
 
 			//XXX only showing first book [OLD]
-			//XXX Changed to prioritizing the first book with lending status avaiable. If no book found with lending status avaiable show first book found from UREAL
+			//Changed to prioritizing the first book with lending status avaiable. If no book found with lending status avaiable show first book found from UREAL
+			// Added check for TAPT
+			// If UREAL had an object, but it has been lost (status: 'tapt'), the Ask2 API still returns the object on a search limited to UREAL, 
+			// but the UREAL item(s) are not returned. Items from other libraries will still show up, 
+			// so if the list contains only items from other libraries (or no items at all), it means we 
+			// had the object at some time, but no more.
+			// We still show the item but show it as unavailable (we added TAPT as a condition for unavailable).
 
-			if (filtered[0]) var book = filtered[0];
-			else var book = firstbook;
+			var book;
+			if (filtered[0]) {
+				book = filtered[0];
+			}
+			else {
+				if (firstbook == "") {
+					book = {status: "TAPT"};
+				}
+				else {
+					book = firstbook;
+				}
+			}
 		
 			data.result.documents[0] = $.extend(data.result.documents[0], book);
 
@@ -141,10 +157,10 @@ $.extend(BookWorms,{
 		
 		$("#fav_star_button_link").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
 		$("#favorite_book_button").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
-		if (data.result.documents[0].lending_status == "UTL" || data.result.documents[0].lending_status == "UTL/RES") {
+		if ($.inArray(data.result.documents[0].lending_status, ["UTL", "UTL/RES", "TAPT"])) {
 			$("#status_indicators").addClass("book_unavailable").removeClass("book_available").removeClass("book_ordered");
 			$("#button_where_is_it").addClass("ui-disabled");
-		} else if (data.result.documents[0].status == "best" || data.result.documents[0].status == "akset") {
+		} else if ($.inArray(data.result.documents[0].status, ["best", "akset"])) {
 			$("#status_indicators").addClass("book_ordered").removeClass("book_available").removeClass("book_unavailable");
 			$("#button_where_is_it").addClass("ui-disabled");
 		} else {
@@ -266,16 +282,6 @@ $.extend(BookWorms,{
 		url = 'https://ask.bibsys.no/ask2/json/result.jsp?' + window.JSONP + '&cql=' + cql + '&page=' + page;
 		$.getJSON(url, function (data) {
 			
-			// If UREAL had an object, but it has been lost (status: 'tapt') or taken out of collection 
-			// (status: 'kass'), the Ask2 API still returns the object on a search limited to UREAL, 
-			// but the UREAL item(s) are not returned. Items from other libraries will still show up, 
-			// so if the list contains only items from other libraries (or no items at all), it means we 
-			// had the object at some time, but no more, and we should remove it from the result list.
-			data.result.documents = $.grep(data.result.documents, function(n, i) {
-				return (n.institutionsection == "UREAL") ? true : false;
-			});
-			data.result.totalHits = data.result.documents.length;
-
 			if (data.result.totalHits == 0)
 			{
 				BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
