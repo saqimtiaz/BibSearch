@@ -283,7 +283,13 @@ $.extend(BookWorms,{
 		} else {
 			cql += '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))';
 		}
-		url = 'https://ask.bibsys.no/ask2/json/result.jsp?' + window.JSONP + '&cql=' + cql + '&page=' + page;
+
+		// @TODO: Replace static version name with window.getVersionName() once we have implemented the method
+		var appver = '1.1-dev';
+
+		// @TODO: It would be preferable to host at app.uio.no, let's see if that's possible...
+		url = 'http://linode.biblionaut.net/app/?cql=' + cql + '&page=' + page + '&appver=' + appver;
+
 		$.getJSON(url, function (data) {
 			
 			if (data.result.totalHits == 0)
