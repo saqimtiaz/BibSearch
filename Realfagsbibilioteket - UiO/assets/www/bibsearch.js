@@ -614,8 +614,9 @@ $.extend(BookWorms,{
 		var isbn = book.isbn.map(function(item) {
 			return item;
 		}).join(", ");
-						
-		var url = "http://openurl.bibsys.no/bibsysx/openurl?" + book.openurlRepresentation;
+
+		//var url = "http://openurl.bibsys.no/bibsysx/openurl?" + book.openurlRepresentation;
+		var url = "http://ask.bibsys.no/ask/action/show?kid=biblio&pid=" + book.recordId;
          //windows.plugins.social.share(url);
          //console.log(url);
          //console.log(windows.plugins);
