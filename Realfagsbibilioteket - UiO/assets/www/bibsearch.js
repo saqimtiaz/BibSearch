@@ -541,7 +541,7 @@ $.extend(BookWorms,{
 	},
 
 	searchByRecordId: function(knyttdokid) {
-		var url = "http://biblionaut.net/services/getids.php?" + window.JSONP + "&id=" + knyttdokid;
+		var url = "http://services.biblionaut.net/getids.php?" + window.JSONP + "&id=" + knyttdokid;
 		$.getJSON(url, function (data) {
 			if (data.objektid === '') {
 				alert("Sorry, this barcode could not be searched");
