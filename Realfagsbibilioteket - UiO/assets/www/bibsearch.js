@@ -508,7 +508,7 @@ $.extend(BookWorms,{
 	},
 
 	scanBarcode : function() {
-		if (window.NoBarCodeHelp) {
+		if (window.BookWorms.ShowBarCodeHelp) {
 			BookWorms.scanNow();
 		} else {
 			$.mobile.changePage("#how_to_scan", {transition: 'none', role: 'dialog'});
@@ -680,5 +680,6 @@ $("#ebook_toggle").change(function() {
 
 
 $('#checkbox-scanhelp').change(function() {
-	window.NoBarCodeHelp = !window.NoBarCodeHelp;
+	window.BookWorms.ShowBarCodeHelp = !window.BookWorms.ShowBarCodeHelp;
+	BookWorms.DB.save({key:"showbarcodehelp", status:window.BookWorms.ShowBarCodeHelp});
 });

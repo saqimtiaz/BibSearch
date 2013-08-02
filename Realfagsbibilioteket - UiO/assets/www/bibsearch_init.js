@@ -150,7 +150,8 @@
 	//global object to hold all custom code.
 	window.BookWorms = {
 			platform : null,
-			searchCache: {}
+			searchCache: {},
+			showBarCodeHelp : true
 	};
 	
 	// hook in before JQM initializes and setup defaults and initialize lawnchair
@@ -165,6 +166,11 @@
 		BookWorms.DB.get("favhistory",function(d){
 			if (d != null) {
 				window.BookWorms.FavHistory = d.history;
+			}
+		});
+		BookWorms.DB.get("showbarcodehelp",function(d){
+			if (d != null) {
+				window.BookWorms.ShowBarCodeHelp = d.status;
 			}
 		});
 		$.each(BookWorms.FavHistory, function (i, el) {
