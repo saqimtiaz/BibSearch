@@ -675,6 +675,7 @@ $('#search_page_form').submit(function() {
 $("#ebook_toggle").change(function() {
 	window.BookWorms.includeEbooks = $(this).val();
 	BookWorms.DB.save({key:"includeebooks", status: $(this).val()});
+	$("#search_button").trigger("click");
 });
 
 
