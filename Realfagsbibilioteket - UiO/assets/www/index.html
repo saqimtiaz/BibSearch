@@ -17,6 +17,8 @@
 		<script type="text/javascript" src="jquery.autocomplete.js"></script>
 		<script src="cordova-2.3.0.js"></script>
 		<script src="barcodescanner.js"></script>
+		<!-- file doesn't exist
+        <script src="social.js"></script>-->
 		<script type="text/javascript" charset="utf-8" src="share.js" ></script>
 		<script src="handlebars-1.0.0.beta.6.js"> </script>	
 		<script src="lawnchair-0.6.1.min.js"> </script>
@@ -31,13 +33,22 @@
 				<div id="search_results_count">{{this.totalHits}} {{pluralize this.totalHits "result" "results"}}</div>
 				<ul data-role="listview" data-divider-theme="b" data-inset="false" id="search_results">
 					{{#each documents}}
+						{{#ifItemType this.material "electronic"}}
+							
 							<li data-theme="c">
 								<a href="#page_books?{{this.recordId}}"  data-transition="slide">
 									<h3>{{this.title}}</h3>
 									<p>{{#listauthors this.creators}}{{/listauthors}}</p>
-									<p class="ui-li-aside"><strong>{{this.year}}</strong>{{#ifCond this.material "electronic"}}<img src="ebook-icon.png"/>{{/ifCond}}</p>
+									<p class="ui-li-aside"><strong>{{this.year}}</strong>
+
+										{{#ifContains this.material "electronic"}}
+											<img src="ebook-icon.png"/>
+										{{/ifContains}}
+
+									</p>
 								</a>
 							</li>
+						{{/ifItemType}}
 					{{/each}}
 				</ul>
 			{{else}}
@@ -98,7 +109,7 @@
 							{{#bookformat this.material}}{{/bookformat}}
 						</div>
 
-						{{#unlessCond this.material "electronic"}}	
+						{{#unlessContains this.material "electronic"}}	
 
 						
 						<div class="ui-block-a" style="margin-top:10px;"> 
@@ -124,7 +135,7 @@
 							{{this.callnumber}} <a href="#page_code_help"><img class="questionmark" src="images/questionmark.png" /></a>
 						</div>
 
-						{{/unlessCond}}
+						{{/unlessContains}}
 					</div>		
 		</script>		
 
@@ -184,7 +195,7 @@
 		<div data-role="page" id="page_home">
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
 				<a class="logo_home_button header_button" href="javascript:;"><img src="uio_segl.png" width="50px"/></a>
-				<h3>UiO<img class="colon" src="colon.png" width="9px"/>Realfagsbibilioteket</h3>
+				<h3>UiO<img class="colon" src="colon.png" width="9px"/>Realfagsbiblioteket</h3>
 				
 			</div>
 			
@@ -198,7 +209,7 @@
 						</div>
 						<form id="home_search_form" style="clear:both">
 							<input name="search" id="searchinput2"
-									placeholder="name, author or ISBN" value="" type="search" />
+									placeholder="name, author or ISBN" value="" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 							<a id="home_search_button" data-role="button">Search</a>
 						</form>
 					</span>
@@ -256,7 +267,7 @@
 							<fieldset >
 								<div id="search_field_box">
 									<input name="search" id="searchinput1"
-									placeholder="name, author or ISBN" value="" type="search" />
+									placeholder="name, author or ISBN" value="" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 								</div>
 								<div id="ebook_toggle_box">				
 									<select name="flip-min" id="ebook_toggle" data-theme="a" data-role="slider">
@@ -362,7 +373,7 @@
 				<div id="about_container">
 					<div class="bibsearch_content_strong">Version 1.0 beta</div>
 					<div>
-						This app was developed as part of the <a href="http://www.ub.uio.no/om/prosjekter/brukerdrevet-innovasjon/" target="_blank">User Driven Innovation</a> project - a collaboration between the University of Oslo Library and Department of Informatics - where students innovate services for students.
+						This app was developed as part of the <a href="http://www.ub.uio.no/om/prosjekter/brukerdrevet-innovasjon/" class="external">User Driven Innovation</a> project - a collaboration between the University of Oslo Library and Department of Informatics - where students innovate services for students.
 					</div>
 					<div><a href="#page_license">License and source code.</a></div>
 					<div>Bugs and suggestions can be reported <a href="mailto:bib-lab-drift@ub.uio.no">here.</a></div>
@@ -380,7 +391,7 @@
 			</div>
 			<div data-role="content" style="padding: 15px">
 				<div id="license_container">
-					<div style="margin:0.8em;"><span class="bibsearch_content_strong">Application source code:</span> available on <a href="https://github.com/saqimtiaz/BibSearch"  target="_blank">github</a> under MIT license.</div>
+					<div style="margin:0.8em;"><span class="bibsearch_content_strong">Application source code:</span> available on <a href="https://github.com/saqimtiaz/BibSearch"   class="external">github</a> under MIT license.</div>
 					<div style="margin:0.8em;"><span class="bibsearch_content_strong">Contributors:</span>
 						<ul style="margin-top:0;">
 							<li>Saq Imtiaz</li>
@@ -437,6 +448,22 @@
 		</div>		
 
 
+        <!-- Unknown barcode dialog -->
+		<div data-role="page" id="unknown_barcode">
+			<div data-role="header" data-theme="d">
+				<h1>Unknown barcode</h1>
+			</div>
+
+			<div data-role="content" data-theme="d">
+				<p>
+                    Sorry, the barcode you scanned is not supported.
+                </p>
+
+                <a href="javascript:;" data-role="button" data-rel="back" data-theme="b">Close</a>
+			</div>
+		</div>
+
+
         <!-- Location and hours -->
 		<div data-role="page" id="page_locationhours">
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
@@ -447,7 +474,7 @@
 			<div data-role="content" style="padding: 15px">
 				<h2 class="text-align-center">Vilhelm Bjerknes' Hus</h2>
 				<div class="text-align-center">
-				<a href="https://maps.google.com/maps?q=Vilhelm+Bjerknes+Hus,+Universitas+Regia+Fredericiana+0851+Oslo,+Norway&hl=en&ie=UTF8&ll=59.939977,10.723171&spn=0.004455,0.010686&sll=59.940176,10.723223&sspn=0.00891,0.021372&hnear=Vilhelm+Bjerknes+Hus,+Ullev%C3%A5l,+0851+Oslo,+Norway&t=m&z=17" target="_blank"><img src="images/map.png" width="80%"/></a>
+				<a href="https://maps.google.com/maps?q=Vilhelm+Bjerknes+Hus,+Universitas+Regia+Fredericiana+0851+Oslo,+Norway&hl=en&ie=UTF8&ll=59.939977,10.723171&spn=0.004455,0.010686&sll=59.940176,10.723223&sspn=0.00891,0.021372&hnear=Vilhelm+Bjerknes+Hus,+Ullev%C3%A5l,+0851+Oslo,+Norway&t=m&z=17"  class="external"><img src="images/map.png" width="80%"/></a>
 				<div style="text-align:left;width:80%;margin: 0 auto;">
 				<h3>Address:</h3>
 				Motke Moes vei 35,<br>

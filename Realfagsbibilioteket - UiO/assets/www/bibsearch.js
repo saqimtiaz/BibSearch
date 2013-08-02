@@ -19,24 +19,53 @@ $.extend(BookWorms,{
 			
 		}
 	},
-	
+
 	getDetailedBookInfo : function(data, urlObj, recordId, options) {
 		
 		var baseURI = "https://ask.bibsys.no/ask2/json/items.jsp?objectid=";
 		//var jsonp = "&jsonp=?";
 		//var jsonp = "";
+		var firstbook="";
 
 		$.getJSON(baseURI + encodeURIComponent(recordId) + "&" + window.JSONP, function(mydata) {
 			var docs = mydata.result.documents;
 			var filtered = $.grep(docs, function(n, i) {
-				return n.institutionsection == "UREAL" ? true : false;
-			});
-			//XXX only showing first book
 
-			var book = filtered[0];
-			
+				if (data.result.documents[0].material.indexOf('electronic') !== -1) {
+					return true;
+				}
+
+				if (n.institutionsection == "UREAL" && firstbook == ""){
+					firstbook = n;
+				}
+
+				return (n.institutionsection == "UREAL"  && n.lending_status != "UTL"  && n.lending_status != "UTL/RES") ? true : false;
+			});
+
+			//XXX only showing first book [OLD]
+			//Changed to prioritizing the first book with lending status avaiable. If no book found with lending status avaiable show first book found from UREAL
+			// Added check for TAPT
+			// If UREAL had an object, but it has been lost (status: 'tapt'), the Ask2 API still returns the object on a search limited to UREAL, 
+			// but the UREAL item(s) are not returned. Items from other libraries will still show up, 
+			// so if the list contains only items from other libraries (or no items at all), it means we 
+			// had the object at some time, but no more.
+			// We still show the item but show it as unavailable (we added TAPT as a condition for unavailable).
+
+			var book;
+			if (filtered[0]) {
+				book = filtered[0];
+			}
+			else {
+				if (firstbook == "") {
+					book = {lending_status: "TAPT"};
+				}
+				else {
+					book = firstbook;
+				}
+			}
+		
 			data.result.documents[0] = $.extend(data.result.documents[0], book);
-			
+
 			BookWorms.getFloorForBook(data, urlObj, recordId, options);
 
 		});				
@@ -132,10 +161,10 @@ $.extend(BookWorms,{
 		
 		$("#fav_star_button_link").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
 		$("#favorite_book_button").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
-		if (data.result.documents[0].lending_status == "UTL") {
+		if ($.inArray(data.result.documents[0].lending_status, ["UTL", "UTL/RES", "TAPT"]) !== -1) {
 			$("#status_indicators").addClass("book_unavailable").removeClass("book_available").removeClass("book_ordered");
 			$("#button_where_is_it").addClass("ui-disabled");
-		} else if (data.result.documents[0].status == "best" || data.result.documents[0].status == "akset") {
+		} else if ($.inArray(data.result.documents[0].status, ["best", "akset"]) !== -1) {
 			$("#status_indicators").addClass("book_ordered").removeClass("book_available").removeClass("book_unavailable");
 			$("#button_where_is_it").addClass("ui-disabled");
 		} else {
@@ -150,7 +179,7 @@ $.extend(BookWorms,{
 		
 		var missing = false;
 		
-		if (window.BookWorms.currentBook["material"] == "electronic") {
+		if (window.BookWorms.currentBook["material"].indexOf("electronic")>-1) {
 			$("#button_where_is_it").hide();
 			$("#button_how_to_access").show();
 		} else {
@@ -229,7 +258,7 @@ $.extend(BookWorms,{
 	//XXX pressing enter should start search
 	getSearchResults : function(urlObj, options) {
 		if (urlObj.hash.indexOf("?") == -1) {
-			showSearchResults(undefined,undefined,undefined,urlObj,options);
+			BookWorms.showSearchResults(undefined,undefined,undefined,urlObj,options);
 			return;
 		}
 		var query = urlObj.hash.split("?")[1];
@@ -237,20 +266,46 @@ $.extend(BookWorms,{
 		var term = parameters[0].split("=")[1];
 		var page = parameters[1].split("=")[1];
 		//XXX add timestamp
-		
-		var url;
-		
-		if (window.BookWorms.includeEbooks == "off") {
-			//url = "https://ask.bibsys.no/ask2/json/result.jsp?jsonp=?" + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL")&page=' + page;
-			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL")&page=' + page;
-		} else {
-			//url = "https://ask.bibsys.no/ask2/json/result.jsp?jsonp=?" + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))&page=' + page;
-			url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=" + term + '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))&page=' + page;
+
+		var cql, url;
+
+		if (term.substr(0,3) !== 'bs.') {
+			cql = '%22' + term + '%22';
+		} else { 
+			// The term is already valid CQL, for instance 'bs.objektid="...."', 'bs.isbn="...."'
+			// so we don't have to escape it
+			cql = term;
+			term = '';  // clear search field to avoid showing complex search query to the user
 		}
-		
+
+		if (window.BookWorms.includeEbooks == "off") {
+			cql += '%20AND%20(bs.avdeling%20=%20"UREAL")';
+		} else {
+			cql += '%20AND%20(bs.avdeling%20=%20"UREAL"%20OR(bs.bibkode%20=%20"k"%20AND%20bs.form%20=%20"n"))';
+		}
+
+		// @TODO: Replace static version name with window.getVersionName() once we have implemented the method
+		var appver = '1.1-dev';
+
+		// @TODO: It would be preferable to host at app.uio.no, let's see if that's possible...
+		url = 'http://linode.biblionaut.net/app/?cql=' + cql + '&page=' + page + '&appver=' + appver;
+
 		$.getJSON(url, function (data) {
-			BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
-		});				
+			
+			if (data.result.totalHits == 0)
+			{
+				BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
+			}
+			else {
+
+				// For series items, we need to lookup the series title before showing the search results
+				window.BookWorms.checkSearchResultsForSeriesTitles(data.result.documents, function() {
+					// callback function when all series titled have been looked up
+					BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
+				});
+			}
+
+		});
 	},
 
 	showSearchResults : function(data,term,pagenr,urlObj,options,query) {
@@ -324,6 +379,66 @@ $.extend(BookWorms,{
 			//if (window.BookWorms.nextPage == urlObj.href)
 				$.mobile.changePage( $page, options );	
 		}			
+	},
+
+	checkSearchResultsForSeriesTitles : function(documents, onDone) {
+		// We loop through the result list and check if any of the objects 
+		// are series item. For each series item, we need to make an ajax call,
+		// and we keep track of the remaining pending tasks with a variable
+		// When there are no more remaining tasks pending, we call onDone()
+		window.BookWorms.pendingTasks = documents.length;
+		$.each(documents, function(index, val) {
+			window.BookWorms.checkitemForSeriesTitle(val, function() {
+				if (window.BookWorms.pendingTasks === 0) {
+					onDone();
+				}
+			});
+		});
+
+	},
+
+	checkitemForSeriesTitle: function(doc, onDone) {
+
+		if (doc.series.length != 0) {
+			// This object is a series item. We look up the series title
+			var url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=bs.objektid%3D%22" + doc.series[0].seriesrecordcontrolnumber + '%22';
+			$.getJSON(url, function (mydata) {
+				
+				var seriesTitle = mydata.result.documents[0].title,
+					seriesVol = doc.series[0].sortingvolume,
+					docTitle = doc.title;
+				
+				if (docTitle === '') {
+					doc.title = seriesTitle;
+					if (seriesVol !== undefined && seriesVol !== '') {
+						doc.title += ' (vol. ' + seriesVol + ')';
+					}
+				} else {
+					doc.title = docTitle;
+					if (seriesVol !== '') {
+						doc.title += ' – vol. ' + seriesVol;
+					}
+					if (seriesTitle !== '') {
+						// Seems like BIBSYS sometimes returns the series title for the issue title(!)
+						// Example: objektid/record id=111115582
+						if (docTitle !== seriesTitle) {
+							doc.title += ' in ' + seriesTitle; 
+						}
+					}
+				}
+				window.BookWorms.checkForSeriesDone(doc, onDone);
+			})
+		}
+		else {
+			// This object is not a series item. Move on
+			window.BookWorms.checkForSeriesDone(doc, onDone);
+		}
+	},
+
+	checkForSeriesDone: function(doc, onDone) {
+		window.BookWorms.pendingTasks -= 1;
+		window.BookWorms.searchCache[doc.recordId] = doc;
+		onDone();
 	},
 
 	updateHomeFavorites : function() {
@@ -400,17 +515,93 @@ $.extend(BookWorms,{
 		}
 	},
 
+	validIsbn10: function(isbn) {
+		var n, i, sum = 0;
+		isbn = isbn.toString(); // make sure it's a string
+		if (isbn.length !== 10) return false;
+		for (i=0; i < 10; i++) {
+			n = (isbn[i] === 'X') ? 10 : parseInt(isbn[i]);
+			sum += n * (10-i);
+		}
+		return sum % 11 === 0;
+	},
+
+	validIsbn13: function(isbn) {
+		var check, i;
+		isbn = isbn.toString(); // make sure it's a string
+		if (isbn.length !== 13) return false;
+		check = 0;
+		for (i = 0; i < 13; i += 2) {
+			check += parseInt(isbn[i]);
+		}
+		for (i = 1; i < 12; i += 2){
+			check += 3 * parseInt(isbn[i]);
+		}
+		return check % 10 === 0;
+	},
+
+	searchByRecordId: function(knyttdokid) {
+		var url = "http://services.biblionaut.net/getids.php?" + window.JSONP + "&id=" + knyttdokid;
+		$.getJSON(url, function (data) {
+			if (data.objektid === '') {
+				alert("Sorry, this barcode could not be searched");
+			} else {
+				$("#searchinput2").val('bs.objektid="' + data.objektid + '"');
+				$("#home_search_button").click();
+			}
+		})
+		.error(function(){
+			$.mobile.hidePageLoadingMsg();
+			$('#block-ui').hide();
+		});
+	},
+	
+	unknownBarcodeFound: function(barcode) {
+		 $.mobile.changePage("#unknown_barcode", {transition: 'none', role: 'dialog'});
+	},
+
 	scanNow : function() {
 		window.plugins.barcodeScanner.scan(
 			function(result) {
-		    	//alert("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format); 
-		    	console.log(0);
-				$("#searchinput1").val(result.text);
-				$("#search_button").click();
+				//alert("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format); 
+				console.log(0);
+				var barcode = result.text,
+					format = 'unknown';
+				// Only numerals?
+
+				var tmp = barcode.match('^[0-9X]{10,13}$');
+				if (tmp && tmp[0] === barcode) {
+					if (barcode.length === 10) {
+						format = 'isbn10';
+						if (!BookWorms.validIsbn10(barcode)) {
+							alert("Bad reading; not a valid ISBN-10 number. Please try again.");
+							return;
+						}
+					} else if (barcode.length === 13) {
+						format = 'isbn13';
+						if (!BookWorms.validIsbn13(barcode)) {
+							alert("Bad reading; not a valid ISBN-13 number. Please try again.");
+							return;
+						}
+					} 
+				} else if (barcode.length === 9 && barcode.match('^[0-9]{2}')) {
+					format = 'dokid'; // dokid eller knyttid
+				}
+				if (format === 'isbn10' || format === 'isbn13') {
+					$("#searchinput2").val('bs.isbn="' + barcode + '"');
+					$("#home_search_button").click();
+				} else if (format === 'dokid') {
+					BookWorms.searchByRecordId(barcode);
+					return;
+				} else {
+					BookWorms.unknownBarcodeFound(barcode);
+					return;
+				}
 			}, 
 			function(error) {
-	    		alert("Scanning failed: " + error);
-		});
+				alert("Scanning failed: " + error);
+			}
+		);
 	},		
 
 	shareBook : function() {
@@ -423,16 +614,26 @@ $.extend(BookWorms,{
 		var isbn = book.isbn.map(function(item) {
 			return item;
 		}).join(", ");
-						
-		var url = "http://openurl.bibsys.no/bibsysx/openurl?" + book.openurlRepresentation;
-		
-		window.plugins.share.show({
-		    subject: book.title,
-		    text: book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url },
-		    function() {}, // Success function
-		    function() {alert('Share failed')} // Failure function
-		
-		);
+
+		//var url = "http://openurl.bibsys.no/bibsysx/openurl?" + book.openurlRepresentation;
+		var url = "http://ask.bibsys.no/ask/action/show?kid=biblio&pid=" + book.recordId;
+         //windows.plugins.social.share(url);
+         //console.log(url);
+         //console.log(windows.plugins);
+         //console.log(windows.plugins.social);
+         if (BookWorms.platform=="Android"){
+            window.plugins.share.show({
+                subject: book.title,
+                text: book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url },
+                function() {}, // Success function
+                function() {alert('Share failed')} // Failure function
+            
+            );
+         } else {
+         console.log(99);
+ //        window.plugins.social.share("hi","","");
+           window.plugins.social.share(book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url,url,"");
+         }
 	}
 	
 });
