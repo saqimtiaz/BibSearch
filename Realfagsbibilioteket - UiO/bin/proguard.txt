@@ -1,6 +1,3 @@
-# view AndroidManifest.xml #generated:40
--keep class com.example.realfagsbibilioteket.MainActivity { <init>(...); }
-
 # view AndroidManifest.xml #generated:57
 -keep class com.google.zxing.client.android.CaptureActivity { <init>(...); }
 
@@ -13,4 +10,7 @@
 
 # view AndroidManifest.xml #generated:87
 -keep class com.google.zxing.client.android.encode.EncodeActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:40
+-keep class no.uio.ub.realfagsbiblioteket.MainActivity { <init>(...); }
 

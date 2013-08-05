@@ -568,7 +568,7 @@ $.extend(BookWorms,{
 				var barcode = result.text,
 					format = 'unknown';
 				// Only numerals?
-
+				
 				var tmp = barcode.match('^[0-9X]{10,13}$');
 				if (tmp && tmp[0] === barcode) {
 					if (barcode.length === 10) {

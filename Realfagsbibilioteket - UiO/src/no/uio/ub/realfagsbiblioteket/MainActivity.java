@@ -1,7 +1,10 @@
-package com.example.realfagsbibilioteket;
+package no.uio.ub.realfagsbiblioteket;
 
 
 import org.apache.cordova.*;
+
+import no.uio.ub.realfagsbiblioteket.R;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
