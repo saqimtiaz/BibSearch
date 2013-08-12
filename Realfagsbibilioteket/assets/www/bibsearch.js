@@ -39,7 +39,10 @@ $.extend(BookWorms,{
 					firstbook = n;
 				}
 
-				return (n.institutionsection == "UREAL"  && n.lending_status != "UTL"  && n.lending_status != "UTL/RES") ? true : false;
+					return (n.institutionsection == "UREAL"
+					&& n.lending_status != "UTL"
+					&& n.lending_status != "UTL/RES"
+					&& n.status.toLowerCase() != "best") ? true : false;
 			});
 
 			//XXX only showing first book [OLD]
