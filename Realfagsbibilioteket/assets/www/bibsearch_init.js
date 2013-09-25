@@ -417,6 +417,9 @@
 		img.onload = function(){
 			$('#page_book_directions .loading').hide();
 		};
+		img.onerror = function(){
+			alert("Sorry, map didn't load due to network problems");
+		};
 		img.src = $("#book_map").attr('src');
 
 	});
@@ -430,6 +433,9 @@
 			if (window.BookWorms.currentBook.mapposition === 'bottom') {
 				$("html, body").animate({ scrollTop: $(document).height() }, 1500);
 			}
+		};
+		img.onerror = function(){
+			alert("Sorry, map didn't load due to network problems");
 		};
 		img.src = $("#book_map_large").attr('src');
 
