@@ -254,6 +254,9 @@ $.extend(BookWorms,{
 	},
 
 	getAppSearchUrl : function(term, page) {
+
+		term = term.replace(/"/g,''); // strip off double quotes since the whole search term is encapsulated in double quotes
+
 		return "#page_search_results?term=" + encodeURIComponent(term) + "&page=" + page;
 	},
 
