@@ -164,6 +164,9 @@
 			by {{#listauthors this.creators}}{{/listauthors}}<br><br>
 
 			<a id="zoom_map" href="#page_map"  data-inline="true" data-theme="a" data-icon="fullscreen" data-iconpos="right"><img src="images/fullscreen.png" width="20px"/></a>
+
+			<a class="loading" style="position:absolute; margin:2em; background:black; color:white; font-size: 1.2em; opacity:0.8; padding:1em; border-radius:10px;">Loading...</a>
+
 			<a href="#page_map" data-transition="fade">
 				<img id="book_map" src="" width="100%"/>
 			</a>
@@ -574,6 +577,7 @@
 			<div data-role="content">
 				<!--<a id="map_shelf_loc"></a>-->
 				<a id="close_map" href="#" data-rel="back" data-inline="true" data-theme="a" data-icon="delete" data-iconpos="right"><img src="images/x.png" width="30px"/></a>
+				<div class="loading" style="position:absolute; z-index:999; top:2em;left:2em; background:black; color:white; font-size: 1.2em; opacity:0.8; padding:1em; border-radius:10px;">Loading...</div>
 				<img id="book_map_large" src="" width="100%" />
 			</div>
 		</div>

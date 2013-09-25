@@ -327,11 +327,13 @@
 
 			if (u.hash == "#page_map" || u.hash == "#page_book_directions") {
 
-
 				var b = window.BookWorms.currentBook;
 
 				var url = "http://app.uio.no/ub/bdi/bibsearch/index.php?collection=%22" + b.collection + "%22&callnumber=%22" + b.callnumber + "%22";
 				var orientation = "&orientation=v";
+
+				$('#book_map_large .loading').show();
+				$('#page_map .loading').show();
 				$("#book_map_large").attr("src", url + orientation );
 				$("#book_map").attr("src", url );
 
@@ -406,6 +408,31 @@
 			window.BookWorms.autoCompleteInit = true;
 		}
 		$(document).scrollTop(0);
+	});
+
+	// Hide loading indicator once map is loaded
+	$("#page_book_directions").live('pageshow', function(event) {
+
+		var img = new Image();
+		img.onload = function(){
+			$('#page_book_directions .loading').hide();
+		};
+		img.src = $("#book_map").attr('src');
+
+	});
+
+	// Hide loading indicator once map is loaded and scroll down to bottom if marker is on the lower part of the map
+	$("#page_map").live('pageshow', function(event) {
+
+		var img = new Image();
+		img.onload = function(){
+			$('#page_map .loading').hide();
+			if (window.BookWorms.currentBook.mapposition === 'bottom') {
+				$("html, body").animate({ scrollTop: $(document).height() }, 1500);
+			}
+		};
+		img.src = $("#book_map_large").attr('src');
+
 	});
 
 	/*
