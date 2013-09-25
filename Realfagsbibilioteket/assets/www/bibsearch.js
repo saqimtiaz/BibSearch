@@ -291,7 +291,7 @@ $.extend(BookWorms,{
 		}
 
 		// @TODO: Replace static version name with window.getVersionName() once we have implemented the method
-		var appver = '1.1-dev';
+		var appver = '1.0.3';
 
 		// @TODO: It would be preferable to host at app.uio.no, let's see if that's possible...
 		url = 'http://linode.biblionaut.net/app/?cql=' + cql + '&page=' + page + '&appver=' + appver;
