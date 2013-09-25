@@ -16,12 +16,12 @@ $.extend(BookWorms,{
 				$.mobile.hidePageLoadingMsg();
 				$('#block-ui').hide();
 			});
-			
+
 		}
 	},
 
 	getDetailedBookInfo : function(data, urlObj, recordId, options) {
-		
+
 		var baseURI = "https://ask.bibsys.no/ask2/json/items.jsp?objectid=";
 		//var jsonp = "&jsonp=?";
 		//var jsonp = "";
@@ -48,9 +48,9 @@ $.extend(BookWorms,{
 			//XXX only showing first book [OLD]
 			//Changed to prioritizing the first book with lending status avaiable. If no book found with lending status avaiable show first book found from UREAL
 			// Added check for TAPT
-			// If UREAL had an object, but it has been lost (status: 'tapt'), the Ask2 API still returns the object on a search limited to UREAL, 
-			// but the UREAL item(s) are not returned. Items from other libraries will still show up, 
-			// so if the list contains only items from other libraries (or no items at all), it means we 
+			// If UREAL had an object, but it has been lost (status: 'tapt'), the Ask2 API still returns the object on a search limited to UREAL,
+			// but the UREAL item(s) are not returned. Items from other libraries will still show up,
+			// so if the list contains only items from other libraries (or no items at all), it means we
 			// had the object at some time, but no more.
 			// We still show the item but show it as unavailable (we added TAPT as a condition for unavailable).
 
@@ -66,16 +66,16 @@ $.extend(BookWorms,{
 					book = firstbook;
 				}
 			}
-		
+
 			data.result.documents[0] = $.extend(data.result.documents[0], book);
 
 			BookWorms.getFloorForBook(data, urlObj, recordId, options);
 
-		});				
+		});
 	},
-	
+
 	getFloorForBook : function(data, urlObj, recordId, options) {
-		
+
 		var url = "http://app.uio.no/ub/bdi/bibsearch/loc.php?collection=%22" + encodeURIComponent(data.result.documents[0].collection) + "%22&callnumber=%22" + data.result.documents[0].callnumber + "%22" ;
 		//console.log(0);
 		$.get(url, function(mydata){
@@ -84,7 +84,7 @@ $.extend(BookWorms,{
 			//console.log(bits);
 			data.result.documents[0].floor = bits[1];
 			//XXX needs fixing, basement books show as 2nd floor
-			
+
 			if (bits[1] == "1") {
 				data.result.documents[0].floortext = "1st mezzanine";
 			} else if (bits[1] == "2") {
@@ -92,14 +92,14 @@ $.extend(BookWorms,{
 			} else {
 				data.result.documents[0].floortext = "";
 			}
-			
+
 //			data.result.documents[0].floortext = bits[1] == "1" ? "1st mezzanine" : "2nd floor / Hangar";
 			data.result.documents[0].mapposition = bits[0];
 			BookWorms.showBook(data, urlObj, recordId, options);
 		})
-		
+
 	},
-	
+
 	getSectionForCurrentBook : function() {
 		var b = window.BookWorms.currentBook;
 		//console.log(b);
@@ -108,7 +108,7 @@ $.extend(BookWorms,{
 			//alert("This subject has not been mapped for the protoype, try a book in Physics instead");
 			//e.preventDefault();
 			//return false;
-			return [];							
+			return [];
 		} else {
 			var callnr = b.callnumber;
 			var emnenr = callnr.split(" ")[0];
@@ -129,18 +129,18 @@ $.extend(BookWorms,{
 				//	console.log(key,value.end);
 				}
 			});
-			//console.log(section);		
+			//console.log(section);
 			$.each(emne.sectionmap[section].shelves, function(key,value) {
 				//console.log(key);
 				if (value.start <= locnr && value.end >= locnr) {
 					shelf = key;
 				}
 			});
-					
+
 		return [section,shelf];
 							}
 	},
-	
+
 	showBook : function(data, urlObj,recordId,options) {
 		//console.log(data);
 		//console.log(recordId);
@@ -153,15 +153,15 @@ $.extend(BookWorms,{
 		var html = template(data.result.documents[0]);
 		$page.page();
 		$("#book_info").html(html);
-		
+
 		var fav = false;
 		BookWorms.DB.exists(recordId, function(exists) {
 			if(exists) {
 				fav = true;
 				};
-			});				
+			});
 		$("#fav_star_button").attr("src", fav ? "star.png" : "star_empty.png");
-		
+
 		$("#fav_star_button_link").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
 		$("#favorite_book_button").attr("href","javascript:(function(){BookWorms.toggleFavorite('" + recordId + "');})()");
 		if ($.inArray(data.result.documents[0].lending_status, ["UTL", "UTL/RES", "TAPT"]) !== -1) {
@@ -179,16 +179,16 @@ $.extend(BookWorms,{
 		} else {
 			$("#floor_help_link").show();
 		}
-		
+
 		var missing = false;
-		
+
 		if (window.BookWorms.currentBook["material"].indexOf("electronic")>-1) {
 			$("#button_where_is_it").hide();
 			$("#button_how_to_access").show();
 		} else {
-			
+
 			if(jQuery.inArray(window.BookWorms.currentBook["collection"],BookWorms.collections)!= -1) {
-			
+
 				$("#button_where_is_it").show();
 				$("#button_how_to_access").hide();
 				//console.log(data.result.documents[0]);
@@ -197,11 +197,11 @@ $.extend(BookWorms,{
 				$("#button_how_to_access").hide();
 				missing = true;
 			}
-			
-			
-			
+
+
+
 			//map urls set here
-			
+
 			//var locinfo = BookWorms.getSectionForCurrentBook();
 			//$("#book_map").attr("src", "http://folk.uio.no/kyrretl/bibl/biblab/bibsearch/imgtest-saq.php?collection=%22Farm.%22&callnumber=%2210.80%22PER%22" );
 			//$("#book_shelf_map").attr("src", "images/shelf" + locinfo[1] + ".png" );
@@ -210,12 +210,12 @@ $.extend(BookWorms,{
 			if (!missing) {
 				s = $("#directions_bookinfo_template").html();
 			} else {
-				s = $("#directions_bookinfo_template_missing").html();				
+				s = $("#directions_bookinfo_template_missing").html();
 			}
 			var t = Handlebars.compile(s);
 			//data.result.documents[0]["shelf"] = locinfo[1];
 			var h = t(data.result.documents[0]);
-			$("#directions_book_info").html(h);		
+			$("#directions_book_info").html(h);
 		}
 
 		var newoptions = {dataUrl : urlObj.href, allowSamePageTransition : true};
@@ -224,7 +224,7 @@ $.extend(BookWorms,{
 		// console.log(window.BookWorms.currentBook);
 		$.mobile.changePage( $page, options );
 	},
-	
+
 	toggleFavorite : function(recordId) {
 		//console.log(recordId);
 		var fav = false;
@@ -249,10 +249,10 @@ $.extend(BookWorms,{
 
 		BookWorms.DB.save({key:"favhistory", history: BookWorms.FavHistory});
 		//XXX totally broken
-		$("#fav_star_button").attr("src", fav ? "star.png" : "star_empty.png"); 
+		$("#fav_star_button").attr("src", fav ? "star.png" : "star_empty.png");
 		$("#favorite_book_button").find(".ui-icon").toggleClass("ui-icon-plus").toggleClass("ui-icon-minus");
 	},
-	
+
 	getAppSearchUrl : function(term, page) {
 		return "#page_search_results?term=" + encodeURIComponent(term) + "&page=" + page;
 	},
@@ -274,7 +274,7 @@ $.extend(BookWorms,{
 
 		if (term.substr(0,3) !== 'bs.') {
 			cql = '%22' + term + '%22';
-		} else { 
+		} else {
 			// The term is already valid CQL, for instance 'bs.objektid="...."', 'bs.isbn="...."'
 			// so we don't have to escape it
 			cql = term;
@@ -294,7 +294,7 @@ $.extend(BookWorms,{
 		url = 'http://linode.biblionaut.net/app/?cql=' + cql + '&page=' + page + '&appver=' + appver;
 
 		$.getJSON(url, function (data) {
-			
+
 			if (data.result.totalHits == 0)
 			{
 				BookWorms.showSearchResults(data,term,page,urlObj,options,decodeURIComponent(term));
@@ -321,17 +321,17 @@ $.extend(BookWorms,{
 				return;
 			}
 			*/
-		
+
 			var prev = parseInt(pagenr) > 0 ? true : false;
 			var prevUrl = BookWorms.getAppSearchUrl(decodeURIComponent(term), parseInt(pagenr) - 1);
 			var next = totalResults - (parseInt(pagenr) + 1) * 10 > 0 ? true : false;
 			var nextUrl = BookWorms.getAppSearchUrl(decodeURIComponent(term),parseInt(pagenr) + 1);
 		}
-		
+
 		var $page = $("#page_search_results");
-		
+
 		if(term!=undefined) {
-		
+
 			var source = $("#search_result_book_template").html();
 			var template = Handlebars.compile(source);
 
@@ -339,23 +339,23 @@ $.extend(BookWorms,{
 			var html = template(data.result);
 		} else {
 			var html = "";
-			
+
 		}
 		$page.page();
-		
-		if (term == undefined || totalResults > 0) 
+
+		if (term == undefined || totalResults > 0)
 			$("#no_books").hide();
 		else
 			$("#no_books").show();
-		
+
 		$("#search_button").removeClass("ui-btn-active");
 		//$(document).scrollTop(0);
-		
+
 		if (term != undefined) {
 			$("#search_results_nav").show();
 			$('#searchinput1').val(decodeURIComponent(term));
 			$("#search_results_container").html(html).find( ":jqmData(role=listview)" ).listview();
-		
+
 			$("#prev_search_button").css("visibility", prev ? "visible" : "hidden").attr("href",prevUrl).removeClass("ui-btn-active");
 			$("#next_search_button").css("visibility", next ? "visible" : "hidden").attr("href",nextUrl).removeClass("ui-btn-active");
 			if (totalResults > 0) {
@@ -364,7 +364,7 @@ $.extend(BookWorms,{
 				$("#search_page_nr").hide();
 			}
 			$("#search_page_nr").html(parseInt(pagenr) + 1 + " / " + parseInt(Math.ceil(totalResults/10)));
-		
+
 			//window.BookWorms.searchCache = {};
 			$.each(data.result.documents, function(index,val) {
 				window.BookWorms.searchCache[val.recordId] = val;
@@ -372,7 +372,7 @@ $.extend(BookWorms,{
 			$.extend(options, {dataUrl : urlObj.href, allowSamePageTransition : true, transition:"none"});
 			//console.log(urlObj.href);
 			//if (window.BookWorms.nextPage == urlObj.href)
-				$.mobile.changePage( $page, options );	
+				$.mobile.changePage( $page, options );
 		} else {
 			$("#search_results_container").html(html);
 			$('#searchinput1').val("");
@@ -380,12 +380,12 @@ $.extend(BookWorms,{
 			$.extend(options, {dataUrl : urlObj.href, allowSamePageTransition : true, transition:"slide"});
 			//console.log(urlObj.href);
 			//if (window.BookWorms.nextPage == urlObj.href)
-				$.mobile.changePage( $page, options );	
-		}			
+				$.mobile.changePage( $page, options );
+		}
 	},
 
 	checkSearchResultsForSeriesTitles : function(documents, onDone) {
-		// We loop through the result list and check if any of the objects 
+		// We loop through the result list and check if any of the objects
 		// are series item. For each series item, we need to make an ajax call,
 		// and we keep track of the remaining pending tasks with a variable
 		// When there are no more remaining tasks pending, we call onDone()
@@ -406,11 +406,11 @@ $.extend(BookWorms,{
 			// This object is a series item. We look up the series title
 			var url = "https://ask.bibsys.no/ask2/json/result.jsp?" + window.JSONP + "&cql=bs.objektid%3D%22" + doc.series[0].seriesrecordcontrolnumber + '%22';
 			$.getJSON(url, function (mydata) {
-				
+
 				var seriesTitle = mydata.result.documents[0].title,
 					seriesVol = doc.series[0].sortingvolume,
 					docTitle = doc.title;
-				
+
 				if (docTitle === '') {
 					doc.title = seriesTitle;
 					if (seriesVol !== undefined && seriesVol !== '') {
@@ -425,7 +425,7 @@ $.extend(BookWorms,{
 						// Seems like BIBSYS sometimes returns the series title for the issue title(!)
 						// Example: objektid/record id=111115582
 						if (docTitle !== seriesTitle) {
-							doc.title += ' in ' + seriesTitle; 
+							doc.title += ' in ' + seriesTitle;
 						}
 					}
 				}
@@ -454,12 +454,12 @@ $.extend(BookWorms,{
 				return false;
 			}
 		});
-		
+
 		//var $page = $("#page_search_results");
 		var source = $("#home_favorites_template").html();
 		var template = Handlebars.compile(source);
 		var html = template({favorites:favs});
-		
+
 		var list = $("#home_favorites").html(html);
 		if (list.hasClass('ui-listview')) {
 			list.listview('refresh');
@@ -473,7 +473,7 @@ $.extend(BookWorms,{
 		//console.log(favs);
 		function SortByTitle(a, b){
 		  var aName = a.doc.title.toLowerCase();
-		  var bName = b.doc.title.toLowerCase(); 
+		  var bName = b.doc.title.toLowerCase();
 		  return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
 		}
 
@@ -488,21 +488,21 @@ $.extend(BookWorms,{
 		var template = Handlebars.compile(source);
 		var html = template({documents:docs});
 		$page.page();
-		$("#favlist_container").html(html).find( ":jqmData(role=listview)" ).listview();				
+		$("#favlist_container").html(html).find( ":jqmData(role=listview)" ).listview();
 	},
 
 	updateFavDeleteDialog : function(urlObj, options) {
-		
+
 		//console.log(1);
 		var favid = urlObj.hash.split("?")[1];
 		//console.log(favid);
 		BookWorms.DB.get(favid, function(d) {
 			//console.log(d);
 			//console.log(d.doc.title);
-			$("#delete_book_title").html(d.doc.title);	
-			
+			$("#delete_book_title").html(d.doc.title);
+
 		});
-		
+
 		//$("#fav_delete_button").attr("href","javascript:(function(){toggleFavorite('" + favid + "');return false;})()");
 		$("#fav_delete_button").unbind("click").click(function(e){
 			BookWorms.toggleFavorite(favid);
@@ -558,7 +558,7 @@ $.extend(BookWorms,{
 			$('#block-ui').hide();
 		});
 	},
-	
+
 	unknownBarcodeFound: function(barcode) {
 		 $.mobile.changePage("#unknown_barcode", {transition: 'none', role: 'dialog'});
 	},
@@ -566,12 +566,12 @@ $.extend(BookWorms,{
 	scanNow : function() {
 		window.plugins.barcodeScanner.scan(
 			function(result) {
-				//alert("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format); 
+				//alert("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format);
 				console.log(0);
 				var barcode = result.text,
 					format = 'unknown';
 				// Only numerals?
-				
+
 				var tmp = barcode.match('^[0-9X]{10,13}$');
 				if (tmp && tmp[0] === barcode) {
 					if (barcode.length === 10) {
@@ -586,7 +586,7 @@ $.extend(BookWorms,{
 							alert("Bad reading; not a valid ISBN-13 number. Please try again.");
 							return;
 						}
-					} 
+					}
 				} else if (barcode.length === 9 && barcode.match('^[0-9]{2}')) {
 					format = 'dokid'; // dokid eller knyttid
 				}
@@ -600,20 +600,20 @@ $.extend(BookWorms,{
 					BookWorms.unknownBarcodeFound(barcode);
 					return;
 				}
-			}, 
+			},
 			function(error) {
 				alert("Scanning failed: " + error);
 			}
 		);
-	},		
+	},
 
 	shareBook : function() {
 		var book = window.BookWorms.currentBook;
-		
+
 		var authors = book.creators.map(function(item) {
 			return item.presentableName;
-		}).join(", ");				
-		
+		}).join(", ");
+
 		var isbn = book.isbn.map(function(item) {
 			return item;
 		}).join(", ");
@@ -630,7 +630,7 @@ $.extend(BookWorms,{
                 text: book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url },
                 function() {}, // Success function
                 function() {alert('Share failed')} // Failure function
-            
+
             );
          } else {
          console.log(99);
@@ -638,7 +638,7 @@ $.extend(BookWorms,{
            window.plugins.social.share(book.title + ' by ' + authors + ".\n\n ISBN:" + isbn + ".\n\n" + url,url,"");
          }
 	}
-	
+
 });
 
 
@@ -650,7 +650,7 @@ $('#search_button').bind('click', function (e) {
 		return false;
 	if (window.BookWorms.AutocompleteA)
 		window.BookWorms.AutocompleteA.container.hide();
-	
+
 	$.mobile.changePage(BookWorms.getAppSearchUrl(term,0));
 	return false;
 });

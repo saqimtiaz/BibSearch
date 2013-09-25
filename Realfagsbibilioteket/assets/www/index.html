@@ -11,7 +11,7 @@
 			/* App custom styles */
 
 		</style>
-		
+
 		<script src="hyllesystem.js"></script> <!-- database of hyller - will be moved to the server -->
 		<script src="jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.autocomplete.js"></script>
@@ -20,21 +20,21 @@
 		<!-- file doesn't exist
         <script src="social.js"></script>-->
 		<script type="text/javascript" charset="utf-8" src="share.js" ></script>
-		<script src="handlebars-1.0.0.beta.6.js"> </script>	
+		<script src="handlebars-1.0.0.beta.6.js"> </script>
 		<script src="lawnchair-0.6.1.min.js"> </script>
 		<script src="query.js"></script>
 		<script src="bibsearch_init.js"> </script>
-		<script src="jquery.mobile-1.2.0.min.js">	</script>				
-		
+		<script src="jquery.mobile-1.2.0.min.js"></script>
+
 		<!--  start handlebars templates -->
 		<script id="search_result_book_template" type="text/x-handlebars-template">
 			{{#if documents.length}}
-			
+
 				<div id="search_results_count">{{this.totalHits}} {{pluralize this.totalHits "result" "results"}}</div>
 				<ul data-role="listview" data-divider-theme="b" data-inset="false" id="search_results">
 					{{#each documents}}
 						{{#ifItemType this.material "electronic"}}
-							
+
 							<li data-theme="c">
 								<a href="#page_books?{{this.recordId}}"  data-transition="slide">
 									<h3>{{this.title}}</h3>
@@ -55,12 +55,12 @@
 			<div id="no_books" class="no_books">No search results found for &quot{{this.query}}&quot, check your spelling or try a less specific search.</div>
 			{{/if}}
 		</script>
-		
+
 		<script id="favorites_list_template" type="text/x-handlebars-template">
 			{{#if documents.length}}
-				
+
 				<ul data-role="listview" data-divider-theme="b" id="favorites_list" data-filter="true" data-filter-placeholder="Search favorites..." data-filter-theme="d" data-split-icon="delete" data-split-theme="d" data-inset="false">
-				
+
 					{{#each documents}}
 							<li data-theme="c">
 								<a href="#page_books?{{this.recordId}}"  data-transition="slide">
@@ -76,86 +76,89 @@
 				<div class="no_favorites_message text-align-center"><br>You have no books saved as favorites.<br><br>You can save a book as a favorite when you are viewing it, by tapping the star next to the book title.<br> <br>When you save books as favorites they will be listed here.</div>
 			{{/if}}
 		</script>
-		
+
 		<script id="book_info_template" type="text/x-handlebars-template">
-					<h3><a href="" id="fav_star_button_link">
-					<img id="fav_star_button" src="star_empty.png"/>
-				</a>{{truncate this.title 160}}</h3>
-					<p>by {{#listauthors this.creators}}{{/listauthors}}</p>
-					<div class="ui-grid-a">
-						<div class="ui-block-a">
-							Year:
-						</div>
-						<div class="ui-block-b">
-							{{this.year}}
-						</div>
-						<div class="ui-block-a">
-							ISBN:
-						</div>
-						<div class="ui-block-b">
-							{{#listisbn this.isbn}}{{/listisbn}}
-						</div>
-						<div class="ui-block-a">
-							Edition:
-						</div>
-						<div class="ui-block-b">
-							{{this.edition}}
-						</div>	
-										
-						<div class="ui-block-a"> 
-							Format:
-						</div>
-						<div class="ui-block-b">
-							{{#bookformat this.material}}{{/bookformat}}
-						</div>
+			<h3>
+				<a href="" id="fav_star_button_link">
+					<img id="fav_star_button" src="star_empty.png">
+				</a>{{truncate this.title 160}}
+			</h3>
+			<p>
+				by {{#listauthors this.creators}}{{/listauthors}}
+			</p>
+			<div class="ui-grid-a">
+				<div class="ui-block-a">
+					Year:
+				</div>
+				<div class="ui-block-b">
+					{{this.year}}
+				</div>
+				<div class="ui-block-a">
+					ISBN:
+				</div>
+				<div class="ui-block-b">
+					{{#listisbn this.isbn}}{{/listisbn}}
+				</div>
+				<div class="ui-block-a">
+					Edition:
+				</div>
+				<div class="ui-block-b">
+					{{this.edition}}
+				</div>
 
-						{{#unlessContains this.material "electronic"}}	
+				<div class="ui-block-a">
+					Format:
+				</div>
+				<div class="ui-block-b">
+					{{#bookformat this.material}}{{/bookformat}}
+				</div>
 
-						
-						<div class="ui-block-a" style="margin-top:10px;"> 
-							Floor:
-						</div>
-						<div class="ui-block-b"  style="margin-top:10px;">
-							{{this.floortext}} <a href="#page_floor_help" id="floor_help_link"><img class="questionmark" src="images/questionmark.png" /></a>
-						</div>
-						
-						{{#if this.collection}}
-						<div class="ui-block-a"> 
-							Collection:
-						</div>
-						<div class="ui-block-b">
-							{{this.collection}} <a href="#page_collections_help"><img class="questionmark" src="images/questionmark.png" /></a>
-						</div>
-						{{/if}}
+				{{#unlessContains this.material "electronic"}}
 
-						<div class="ui-block-a"> 
-							Code:
-						</div>
-						<div class="ui-block-b">
-							{{this.callnumber}} <a href="#page_code_help"><img class="questionmark" src="images/questionmark.png" /></a>
-						</div>
+				<div class="ui-block-a" style="margin-top:10px;">
+					Floor:
+				</div>
+				<div class="ui-block-b"  style="margin-top:10px;">
+					{{this.floortext}} <a href="#page_floor_help" id="floor_help_link"><img class="questionmark" src="images/questionmark.png" /></a>
+				</div>
 
-						{{/unlessContains}}
-					</div>		
-		</script>		
+				{{#if this.collection}}
+				<div class="ui-block-a">
+					Collection:
+				</div>
+				<div class="ui-block-b">
+					{{this.collection}} <a href="#page_collections_help"><img class="questionmark" src="images/questionmark.png" /></a>
+				</div>
+				{{/if}}
 
-		<script id="home_favorites_template" type="text/x-handlebars-template">		
-					<li data-role="list-divider" role="heading">Favorites <img src="star.png" class="list_decorator ui-li-thumb" width="24px" /> </li>
-					{{#if favorites.length}}
-					{{#each favorites}}
-					<li data-theme="c">
-						<a href="#page_books?{{this.recordId}}" data-transition="slide">{{this.title}}</a>
-					</li>
-					{{/each}}
-					<li data-theme="c">
-						<a href="#page_favorites" data-transition="slide">More...</a>
-					</li>
-					{{else}}
-					<li class="no_fav_text">When you save books as favorites they will be listed here.<br>You can save a book as a favorite by tapping the star next to the book title.</li>
-					
-					{{/if}}
+				<div class="ui-block-a">
+					Code:
+				</div>
+				<div class="ui-block-b">
+					{{this.callnumber}} <a href="#page_code_help"><img class="questionmark" src="images/questionmark.png" /></a>
+				</div>
+
+				{{/unlessContains}}
+			</div>
 		</script>
-		
+
+		<script id="home_favorites_template" type="text/x-handlebars-template">
+			<li data-role="list-divider" role="heading">Favorites <img src="star.png" class="list_decorator ui-li-thumb" width="24px" /> </li>
+			{{#if favorites.length}}
+			{{#each favorites}}
+			<li data-theme="c">
+				<a href="#page_books?{{this.recordId}}" data-transition="slide">{{this.title}}</a>
+			</li>
+			{{/each}}
+			<li data-theme="c">
+				<a href="#page_favorites" data-transition="slide">More...</a>
+			</li>
+			{{else}}
+			<li class="no_fav_text">When you save books as favorites they will be listed here.<br>You can save a book as a favorite by tapping the star next to the book title.</li>
+
+			{{/if}}
+		</script>
+
 		<script id="directions_bookinfo_template" type="text/x-handlebars-template">
 			<b>{{truncate this.title 160}}</b><br>
 			by {{#listauthors this.creators}}{{/listauthors}}<br><br>
@@ -165,10 +168,10 @@
 				<img id="book_map" src="" width="100%"/>
 			</a>
 
-			
+
 			<div class="bookinfo_definition"> {{this.floortext}} <a href="#page_floor_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
 			<div class="bookinfo_term">Floor:</div>
-			
+
 			{{#if this.collection}}
 			<div class="bookinfo_definition">{{this.collection}} <a href="#page_collections_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
 			<div class="bookinfo_term">Collection:</div>
@@ -177,30 +180,30 @@
 			<div class="bookinfo_definition bookinfo_highlighted">{{this.callnumber}} <a href="#page_code_help"><img class="questionmark" src="images/questionmark.png" /></a></div>
 			<div class="bookinfo_term">Code:</div>
 
-			
+
 		</script>
-		
+
 		<script id="directions_bookinfo_template_missing" type="text/x-handlebars_template">
 			<b>{{truncate this.title 160}}</b><br>
 			by {{#listauthors this.creators}}{{/listauthors}}<br><br>
 			<p>We have no maps for this collection, please consult a librarian to help you find this book.</p>
 		</script>
-		
+
 		<!--  end handelbars templates -->
-		
+
 	</head>
 	<body>
-	
+
 		<!-- Home -->
 		<div data-role="page" id="page_home">
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
 				<a class="logo_home_button header_button" href="javascript:;"><img src="uio_segl.png" width="50px"/></a>
 				<h3>UiO<img class="colon" src="colon.png" width="9px"/>Realfagsbiblioteket</h3>
-				
+
 			</div>
-			
+
 			<div data-role="content" style="padding:5px 5px 5px 5px" id="home_menugrid">
-			
+
 				<div id="home_search_box" class="ui-btn ui-btn-corner-all ui-btn-up-c" href="#" data-corners="true" data-shadow="true" data-iconshadow="true" data-iconsize="18" data-wrapperels="span" data-theme="c">
 					<span class="ui-btn-inner ui-btn-corner-all">
 						<div id="search_icon_container">
@@ -214,7 +217,7 @@
 						</form>
 					</span>
 				</div>
-			
+
 					<!--
 					<div>
 						<a href="#page_search_results" data-role="button" class="">Find books /<br>ebooks</a>
@@ -227,7 +230,7 @@
 								<img src="images/location.png"/>
 								<p>Location<br/>and hours</p>
 							</div>
-						</a>						
+						</a>
 					</div>
 					<div class="ui-block-b">
 						<a href="#"  onclick="BookWorms.scanBarcode();" data-role="button">
@@ -236,14 +239,14 @@
 								<p>Scan<br/>barcode</p>
 							</div>
 						</a>
-					</div>					
+					</div>
 
 
 				</div>
 				<div style="padding: 0 10px 10px 10px">
 				<ul data-role="listview" data-divider-theme="a" data-inset="false" id="home_favorites">
 					<li data-role="list-divider" role="heading">Favorites <img src="star.png" width="24px" /></li>
-										
+
 				</ul>
 				</div>
 			</div>
@@ -252,13 +255,13 @@
 			</div>
 		</div>
 
-		
+
         <!-- Search results -->
         <div data-role="page" id="page_search_results">
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
 				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
 				<h3>Search</h3>
-				
+
 			</div>
             <div data-role="content" style="padding: 15px 15px 10px">
             	<div id="search_form_results">
@@ -269,7 +272,7 @@
 									<input name="search" id="searchinput1"
 									placeholder="name, author or ISBN" value="" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 								</div>
-								<div id="ebook_toggle_box">				
+								<div id="ebook_toggle_box">
 									<select name="flip-min" id="ebook_toggle" data-theme="a" data-role="slider">
 										<option value="off">no ebooks</option>
 										<option value="on">with ebooks</option>
@@ -280,7 +283,7 @@
 									<a href="javascript:;" data-role="button" data-theme="a" id="search_button">Search</a>
 								</div>
 							</fieldset>
-						</div>	
+						</div>
 					</form>
 					<div id="no_books"></div>
 				</div>
@@ -301,7 +304,7 @@
                     </div>
                 </div>
             </div>
-        </div>		
+        </div>
 
         <!-- Books -->
 		<div data-role="page" id="page_books">
@@ -321,17 +324,17 @@
 				<a id="button_where_is_it" data-role="button" data-transition="fade" data-theme="c" href="#page_book_directions">
 					Where is it?<img src="map_icon_3.png" class="book_action_button"/>
 				</a>
-				
-																		
+
+
 				<a id="button_how_to_access"data-role="button" data-transition="fade" data-theme="c" href="#page_how_to_access">
 					How to access it?
 				</a>
-				
+
 				<a data-role="button" data-transition="fade" href="#" onclick="BookWorms.shareBook();">
 					Share<img src="share_small.png" id="book_share_button" class="book_action_button"/>
 				</a>
 			</div>
-		</div>		
+		</div>
 
         <!-- How to access -->
 		<div data-role="page" id="page_how_to_access">
@@ -349,7 +352,7 @@
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 
         <!-- Favorites -->
 		<div data-role="page" id="page_favorites">
@@ -361,7 +364,7 @@
 			<div data-role="content" style="padding: 15px">
 				<div id="favlist_container"></div>
 			</div>
-		</div>	
+		</div>
 
         <!-- About -->
 		<div data-role="page" id="page_about">
@@ -381,7 +384,7 @@
 					<div><span class="bibsearch_content_strong">Designed by:</span> Therese Slang, Hilde Bakken Reistad, Saq Imtiaz, Lena Drevsjø, Jeongyun Choi.</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 
         <!-- License -->
 		<div data-role="page" id="page_license">
@@ -426,7 +429,7 @@
 			</div>
 		</div>
 
-		
+
 		<!-- How to scan bar code-->
 		<div data-role="page" id="how_to_scan">
 			<div data-role="header" data-theme="d">
@@ -434,18 +437,18 @@
 			</div>
 
 			<div data-role="content" data-theme="d">
-				
+
 				<ul id="how_to_scan_desc">
 					<li>Hold your mobile so that the entire barcode is located in the inner field, as shown below.</li>
 					<li>Do not move the phone, it will automatically read the barcode when it has focused.</li>
 				</ul>
-				
+
 				<img src="images/howToScanBarcode.png" width="100%" />
 				<input type="checkbox" name="checkbox-scanhelp" id="checkbox-scanhelp" class="custom" />
 				<label for="checkbox-scanhelp">Don't show this again</label>
 				<a href="javascript:;" data-role="button" data-rel="back" data-theme="b" id="scan_ok_button">Scan now</a>
 			</div>
-		</div>		
+		</div>
 
 
         <!-- Unknown barcode dialog -->
@@ -483,12 +486,12 @@
 				<h3>Opening hours:</h3>
 				Monday-Friday: 08.00-22.00<br>
 				Saturday-Sunday: 10.00-18.00<br><br>
-				</div>				
+				</div>
 				</div>
 
 			</div>
-		</div>	
-			
+		</div>
+
 
 
         <!-- Book Directions -->
@@ -500,7 +503,7 @@
 			</div>
 			<div data-role="content" style="padding: 15px">
 				<div>
-				<!--  
+				<!--
 					<a id="zoom_map" href="#page_map" data-role="button" data-inline="true" data-theme="a" data-icon="fullscreen" data-iconpos="right">zoom</a>
 					<a href="#page_map" data-transition="fade">
 						<img id="book_map" src="" width="100%"/>
@@ -508,10 +511,10 @@
 					-->
 				</div>
 				<div id="directions_book_info"></div>
-				
+
 			</div>
-		</div>	
-	
+		</div>
+
         <!-- Book Directions Missing -->
 		<div data-role="page" id="page_book_directions_missing">
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
@@ -521,7 +524,7 @@
 			</div>
 			<div data-role="content" style="padding: 15px">
 				<div>
-				<!--  
+				<!--
 					<a id="zoom_map" href="#page_map" data-role="button" data-inline="true" data-theme="a" data-icon="fullscreen" data-iconpos="right">zoom</a>
 					<a href="#page_map" data-transition="fade">
 						<img id="book_map" src="" width="100%"/>
@@ -529,13 +532,13 @@
 					-->
 				</div>
 				<div id="directions_book_info"></div>
-				
+
 			</div>
-		</div>	
+		</div>
 
         <!-- Large book map -->
 		<div data-role="page" id="page_map">
-			
+
 			<div data-role="content">
 				<!--<a id="map_shelf_loc"></a>-->
 				<a id="close_map" href="#" data-rel="back" data-inline="true" data-theme="a" data-icon="delete" data-iconpos="right"><img src="images/x.png" width="30px"/></a>
@@ -559,28 +562,28 @@
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
 				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
 				<h3>Collections</h3>
-			</div>			
+			</div>
 			<div data-role="content" class="ui-grid-a">
-				<div class="ui-block-a">	
+				<div class="ui-block-a">
 					<span class="bibsearch_content_strong">Basement/VBMag:</span>
 					<ul>
 						<li>VBmag = Books/Master thesis</li>
 						<li>Doktoravghandling = PhD thesis</li>
 						<li>Avh = Thesis</li>
 						<li>Master</li>
-					</ul>				
+					</ul>
 					<span class="bibsearch_content_strong">1st mezzanine:</span>
 					<ul>
 						<li>Samling 42</li>
-					</ul>					
+					</ul>
 					<span class="bibsearch_content_strong">Other:</span>
 					<ul>
 						<li>Boksamling = Books incorporated into the books collection after November-11 and biology literature after 2006</li>
 						<li>Electronic = Books and articles that are available electronically</li>
 						<li>Tidsskr = 2nd mezzanine and various magazines. New journals (from 2013) in reading corner, west in 1st mezzanine</li>
-					</ul>					
+					</ul>
 				</div>
-				<div class="ui-block-b">		
+				<div class="ui-block-b">
 					<span class="bibsearch_content_strong">2nd floor - The main library (Hangar):</span>
 					<ul>
 						<li>Astr = Astrophysics</li>
@@ -597,7 +600,7 @@
 						<li>Oppsl = Lookup</li>
 						<li>Pensum = Syllabus</li>
 						<li>Lavergrad = Undergraduate</li>
-					</ul>		
+					</ul>
 				</div>
 
 			</div>
@@ -608,7 +611,7 @@
 			<div data-theme="a" data-role="header" data-position="fixed" data-id="foo">
 				<a class="logo_home_button header_button" href="index.html" data-direction="reverse"><img src="uio_segl_arrow.png" width="50px"/></a>
 				<h3>Code example</h3>
-			</div>			
+			</div>
 			<div data-role="content" style="text-align:center;">
 			<img src="images/bok.png" style="height:450px;" />
 			</div>
@@ -618,7 +621,7 @@
 		</div>
 		<script src="http://app.uio.no/ub/bdi/bibsearch/getcollections.php"></script>
 		<script src="bibsearch.js"></script>
-		
+
 		<!--
 		<script src="http://debug.shadow.adobe.com:8080/target/target-script-min.js#saq"></script>
 		-->
