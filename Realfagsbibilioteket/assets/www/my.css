@@ -107,7 +107,6 @@ ul#search_results {
 	font-size: inherit;
 	/*margin-top: 1.2em;*/
 	width: 15%;
-	
 }
 
 #search_results .ui-li-aside img, #favorites_list .ui-li-aside img {
@@ -248,19 +247,42 @@ ul#search_results {
 }
 
 .ui-header {
-	height: 45px;
-	
+	height: 3em;
+}
+.header_button {
+	font-size: 1em !important;
+}
+.header_button .ui-btn-inner {
+	font-size: 1em !important;
 }
 
-#page_home .ui-header .ui-title {
-	margin: 0.5em 15px 0.8em 55px;
+.ui-header .logo {
+	 height: 2.6em;
+	 margin: 0.2em;
+	 vertical-align: middle;
+}
+.ui-header .ui-title {
+	display: inline-block;
+	margin: 0 0 0 4em;
+	line-height: 3em;
+	font-size: 1em;
+	vertical-align: middle;
 	text-align: left;
 }
+.ui-header .ui-title big {
+	font-size: 1.2em;
+	font-weight: normal;
+}
+.ui-header .ui-title a {
+	margin: 0.5em 0;
+	font-size: 1em;
+}
 
+/*
 .ui-header .ui-title {
 	margin: 0.5em 0;
 	font-size: 19px;
-}
+}*/
 
 .header_button {
 	background: transparent;
@@ -277,8 +299,8 @@ ul#search_results {
 }
 
 .ui-header .ui-btn-left {
-	top: 2px;
-	left: 1px;
+	top: 0;
+	left: 0;
 }
 
 .colon {
@@ -405,7 +427,6 @@ ul#search_results {
 
 .ui-icon-fullscreen {
 	background-image: url("images/fullscreen.png");
-	
 }
 
 #zoom_map .ui-icon {
@@ -542,7 +563,7 @@ a.ui-input-clear {
 	margin-bottom: -4px;
 }
 
-#page_collections_help {
+#page_collections_help .ui-grid-a {
 	font-size: 90%;
 }
 
