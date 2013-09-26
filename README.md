@@ -1,7 +1,7 @@
-BibSearch
+Realfagsbiblioteket
 =========
 
-PhoneGap-based app for searching and navigating the UiO Science Library. 
+PhoneGap-based app (Android, iOs) for searching and navigating the UiO Science Library. 
 Licensed under the MIT license.
 
 Note that only the Android project files are currently in the repo.
